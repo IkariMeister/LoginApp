@@ -13,6 +13,8 @@ This repository contains an Android application that allows user to perform a lo
 
 ![UIpreview](docs/UIpreview.png) 
 
+Since the API is not ready a Fake implementation of the API client will be provided. As the contract of the API is already defined, We will implement also a Real ApiClient that will be tested using **HttpStubbing** with _MockWebServer_.
+
 ## CI
 
 Several CI checks are set up yo guarantee code style and code quality standards are fulfilled.
