@@ -1,4 +1,4 @@
-name: Android Checkstyle
+name: Android Checkstyle & Unit Testing
 
 on: [push, pull_request]
 
@@ -22,11 +22,11 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Check code style ktlint and detekt
-        run: ./gradlew check ktlint detekt
+        run: ./gradlew check ktlint detekt testDebugUnitTest
 
       - uses: actions/upload-artifact@v2
-        name: checkstyle-reports
+        name: unit-test-reports
         with:
-          name: checkstyle-reports
+          name: unit-test-reports
           path: |
             ./app/build/reports
