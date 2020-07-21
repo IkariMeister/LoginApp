@@ -34,8 +34,14 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
 
     implementation "io.arrow-kt:arrow-core-data:$arrow_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.google.code.gson:gson:$gson_version"
 
     testImplementation "junit:junit:$junit_version"
     testImplementation "io.kotlintest:kotlintest:$kotlintest_version"
     testImplementation "io.mockk:mockk:$mockk_version"
+    testImplementation "com.squareup.okhttp3:mockwebserver:$mockwebserver_version"
+    testImplementation "commons-io:commons-io:$commonsio_version"
+
 }
