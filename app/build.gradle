@@ -33,5 +33,9 @@ dependencies {
     implementation "androidx.core:core-ktx:$corektx_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
 
+    implementation "io.arrow-kt:arrow-core-data:$arrow_version"
+
     testImplementation "junit:junit:$junit_version"
+    testImplementation "io.kotlintest:kotlintest:$kotlintest_version"
+    testImplementation "io.mockk:mockk:$mockk_version"
 }
