@@ -1,6 +1,6 @@
 name: Android CI
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   build:
@@ -22,4 +22,11 @@ jobs:
           ${{ runner.os }}-gradle-
 
     - name: Build with Gradle
-      run: ./gradlew test
+      run: ./gradlew assembleDebug
+
+    - uses: actions/upload-artifact@v2
+      name: binaries
+      with:
+        name: binary
+        path: |
+          ./app/build/outputs/apk/debug/*.apk
