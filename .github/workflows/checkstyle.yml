@@ -23,3 +23,10 @@ jobs:
 
       - name: Check code style ktlint and detekt
         run: ./gradlew check ktlint detekt
+
+      - uses: actions/upload-artifact@v2
+        name: checkstyle-reports
+        with:
+          name: checkstyle-reports
+          path: |
+            ./app/build/reports
