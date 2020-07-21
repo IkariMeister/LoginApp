@@ -13,21 +13,6 @@ ij_formatter_tags_enabled = false
 ij_smart_tabs = false
 ij_wrap_on_typing = false
 
-[*.conf]
-indent_size = 2
-tab_width = 2
-ij_continuation_indent_size = 2
-ij_hocon_keep_blank_lines_before_right_brace = 2
-ij_hocon_keep_indents_on_empty_lines = false
-ij_hocon_keep_line_breaks = true
-ij_hocon_space_after_colon = true
-ij_hocon_space_after_comma = true
-ij_hocon_space_before_colon = true
-ij_hocon_space_before_comma = false
-ij_hocon_spaces_within_braces = false
-ij_hocon_spaces_within_brackets = false
-ij_hocon_spaces_within_method_call_parentheses = false
-
 [*.java]
 ij_java_align_consecutive_assignments = false
 ij_java_align_consecutive_variable_declarations = false
@@ -487,8 +472,8 @@ ij_kotlin_method_call_chain_wrap = off
 ij_kotlin_method_parameters_new_line_after_left_paren = false
 ij_kotlin_method_parameters_right_paren_on_new_line = false
 ij_kotlin_method_parameters_wrap = off
-ij_kotlin_name_count_to_use_star_import = 5
-ij_kotlin_name_count_to_use_star_import_for_members = 3
+ij_kotlin_name_count_to_use_star_import = 20
+ij_kotlin_name_count_to_use_star_import_for_members = 20
 ij_kotlin_parameter_annotation_wrap = off
 ij_kotlin_space_after_comma = true
 ij_kotlin_space_after_extend_colon = true
