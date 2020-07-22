@@ -12,6 +12,7 @@ class RealLoginApiClientTest : MockWebServerTest() {
 
     companion object {
         val anyUser = User(email = Email("jcgseco@gmail.com"), password = Password("123456"))
+        const val ANY_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
     }
 
     @Before
@@ -51,7 +52,7 @@ class RealLoginApiClientTest : MockWebServerTest() {
     @Test
     fun `Token Retrieved when success login response is received`() {
         enqueueMockResponse(200, "login/response.json")
-        val expected = Token("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.")
+        val expected = Token(ANY_TOKEN)
 
         val actual = apiClient.login(anyUser)
 
