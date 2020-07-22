@@ -13,7 +13,10 @@ This repository contains an Android application that allows user to perform a lo
 
 ![UIpreview](docs/UIpreview.png) 
 
-Since the API is not ready a Fake implementation of the API client will be provided. As the contract of the API is already defined, We will implement also a Real ApiClient that will be tested using **HttpStubbing** with _MockWebServer_.
+Since the API is not ready a Fake implementation of the API client will be provided. As the contract of the API is already defined, We will implement also a Real ApiClient, using retrofit, that will be tested using **HttpStubbing** with _MockWebServer_.
+
+The local storage for the login information is implemented using a Repository pattern. With the requirements we already have, the data source we will use will be Android Shared Preferences since is a simple solution, but in the future could be replaced by a database implementation, to make this change easier we will use Repository pattern, to abstract the business logic from the real data source and allow to replace data source implementation fast and smooth.
+Since the data source is implemented with Shared Preferences over Android SDK, instrumentation tests will be required to test its correct working.
 
 ## CI
 
