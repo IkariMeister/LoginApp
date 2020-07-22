@@ -31,6 +31,6 @@ class SharedPreferencesTokenDataSource(
 
     companion object {
         const val ID = "token"
-        val preferences: SharedPreferences = LoginApp.instance.getSharedPreferences(ID, MODE_PRIVATE)!!
+        val preferences: SharedPreferences by lazy { LoginApp.instance.getSharedPreferences(ID, MODE_PRIVATE)!! }
     }
 }

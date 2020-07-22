@@ -42,6 +42,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
 
     implementation "io.arrow-kt:arrow-core-data:$arrow_version"
+    implementation "io.arrow-kt:arrow-fx:$arrow_version"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.google.code.gson:gson:$gson_version"
