@@ -7,4 +7,5 @@ interface LoginView {
     fun hideLoading()
     fun showLoginError(error: LoginError)
     fun navigateToLoggedScreen()
+    fun showLoginForm()
 }

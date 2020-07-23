@@ -3,6 +3,7 @@ package com.ikarimeister.loginapp.ui.presenter
 import arrow.core.left
 import arrow.core.right
 import com.ikarimeister.loginapp.domain.model.*
+import com.ikarimeister.loginapp.domain.usecases.IsLoginStored
 import com.ikarimeister.loginapp.domain.usecases.Login
 import com.ikarimeister.loginapp.ui.view.LoginView
 import io.mockk.MockKAnnotations
@@ -21,13 +22,16 @@ class LoginPresenterTest {
     lateinit var login: Login
 
     @MockK
+    lateinit var islogged: IsLoginStored
+
+    @MockK
     lateinit var view: LoginView
     private lateinit var presenter: LoginPresenter
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        presenter = LoginPresenter(view, login, Dispatchers.Unconfined, Dispatchers.Unconfined)
+        presenter = LoginPresenter(view, login, islogged, Dispatchers.Unconfined, Dispatchers.Unconfined)
         presenter.initScope()
     }
 
@@ -61,6 +65,34 @@ class LoginPresenterTest {
             view.showLoading()
             view.hideLoading()
             view.navigateToLoggedScreen()
+        }
+    }
+
+    @Test
+    fun `View should show and hide loading and navigate to logged screen when starts and a Token is stored`() {
+        givenAView()
+        every { runBlocking { islogged() } } returns token.right()
+
+        presenter.onStart()
+
+        verifyOrder {
+            view.showLoading()
+            view.hideLoading()
+            view.navigateToLoggedScreen()
+        }
+    }
+
+    @Test
+    fun `View should show and hide loading and show logging form when starts and a Token is not stored`() {
+        givenAView()
+        every { runBlocking { islogged() } } returns TokenNotFound.left()
+
+        presenter.onStart()
+
+        verifyOrder {
+            view.showLoading()
+            view.hideLoading()
+            view.showLoginForm()
         }
     }
 
