@@ -11,7 +11,7 @@ class RealLoginApiClientTest : MockWebServerTest() {
     private lateinit var apiClient: LoginApiClient
 
     companion object {
-        val anyUser = User(email = Email("jcgseco@gmail.com"), password = Password("123456"))
+        val anyUser = User(email = Email("john.doe@company.com"), password = Password("123456"))
         const val ANY_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
     }
 

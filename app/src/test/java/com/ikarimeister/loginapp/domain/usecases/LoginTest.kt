@@ -10,6 +10,7 @@ import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.verify
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -32,9 +33,8 @@ class LoginTest {
     }
 
     @Test
-    fun `Should return a LoginError when LoginApiClient returns any login error`() {
+    fun `Should return a LoginError when LoginApiClient returns any login error`() = runBlocking {
         every { stubApiClient.login(any()) } returns NoConection.left()
-        val user = User(email = Email(""), password = Password(""))
 
         val actual = sut.invoke(user)
 
@@ -42,11 +42,9 @@ class LoginTest {
     }
 
     @Test
-    fun `Should return a Token when LoginApiClient returns a Token`() {
-        val token = Token("")
+    fun `Should return a Token when LoginApiClient returns a Token`() = runBlocking {
         every { stubApiClient.login(any()) } returns token.right()
         every { mockRepository.plus(token) } returns Unit.right()
-        val user = User(email = Email(""), password = Password(""))
 
         val actual = sut.invoke(user)
 
@@ -54,9 +52,8 @@ class LoginTest {
     }
 
     @Test
-    fun `Should save nothing on the repository when LoginApiClient returns any login error`() {
+    fun `Should save nothing on the repository when LoginApiClient returns any login error`() = runBlocking {
         every { stubApiClient.login(any()) } returns NoConection.left()
-        val user = User(email = Email(""), password = Password(""))
 
         sut.invoke(user)
 
@@ -64,14 +61,19 @@ class LoginTest {
     }
 
     @Test
-    fun `Should save on repository a Token when LoginApiClient returns a Token`() {
-        val token = Token("")
+    fun `Should save on repository a Token when LoginApiClient returns a Token`() = runBlocking {
         every { stubApiClient.login(any()) } returns token.right()
         every { mockRepository.plus(token) } returns Unit.right()
-        val user = User(email = Email(""), password = Password(""))
 
         sut.invoke(user)
 
         verify { mockRepository + token }
+    }
+
+    companion object {
+        private val email = Email("john.doe@company.com")
+        private val password = Password("123456")
+        private val token = Token("fdskjflsdjflsdjf")
+        private val user = User(email, password)
     }
 }
