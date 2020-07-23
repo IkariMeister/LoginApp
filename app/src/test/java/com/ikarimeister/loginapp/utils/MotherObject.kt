@@ -11,5 +11,7 @@ object MotherObject {
     val password = Password("123456")
     val token = Token(ANY_TOKEN)
     val otherToken = Token("gdfgdfgdfgkfñdlgk")
+    val emptyEmail = Email("")
+    val emptyPassword = Password("")
     val user = User(email, password)
 }

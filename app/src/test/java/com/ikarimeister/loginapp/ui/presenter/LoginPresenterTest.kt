@@ -7,11 +7,14 @@ import com.ikarimeister.loginapp.domain.usecases.IsLoginStored
 import com.ikarimeister.loginapp.domain.usecases.Login
 import com.ikarimeister.loginapp.ui.view.LoginView
 import com.ikarimeister.loginapp.utils.MotherObject.email
+import com.ikarimeister.loginapp.utils.MotherObject.emptyEmail
+import com.ikarimeister.loginapp.utils.MotherObject.emptyPassword
 import com.ikarimeister.loginapp.utils.MotherObject.password
 import com.ikarimeister.loginapp.utils.MotherObject.token
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.verify
 import io.mockk.verifyOrder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -53,7 +56,7 @@ class LoginPresenterTest {
         verifyOrder {
             view.showLoading()
             view.hideLoading()
-            view.showLoginError(IncorrectCredentials)
+            view.showError(IncorrectCredentials)
         }
     }
 
@@ -99,10 +102,20 @@ class LoginPresenterTest {
         }
     }
 
+    @Test
+    fun `View should show validation errors in login form when user is not valid`() {
+        givenAView()
+
+        presenter.doLogin(emptyEmail, emptyPassword)
+
+        verify { view.showError(any<List<ValidationErrors>>()) }
+    }
+
     private fun givenAView() {
         every { view.showLoading() } returns Unit
         every { view.hideLoading() } returns Unit
-        every { view.showLoginError(any()) } returns Unit
+        every { view.showError(any<LoginError>()) } returns Unit
+        every { view.showError(any<List<ValidationErrors>>()) } returns Unit
         every { view.navigateToLoggedScreen() } returns Unit
     }
 }
