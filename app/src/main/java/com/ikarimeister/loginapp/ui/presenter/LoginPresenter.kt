@@ -1,8 +1,10 @@
 package com.ikarimeister.loginapp.ui.presenter
 
+import arrow.core.Nel
 import com.ikarimeister.loginapp.domain.model.Email
 import com.ikarimeister.loginapp.domain.model.Password
 import com.ikarimeister.loginapp.domain.model.User
+import com.ikarimeister.loginapp.domain.model.ValidationErrors
 import com.ikarimeister.loginapp.domain.usecases.IsLoginStored
 import com.ikarimeister.loginapp.domain.usecases.Login
 import com.ikarimeister.loginapp.ui.coomons.Scope
@@ -16,24 +18,34 @@ class LoginPresenter(
     private val view: LoginView?,
     private val login: Login,
     private val isLoginStored: IsLoginStored,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    iuDispacher: CoroutineDispatcher = Dispatchers.Main
-) : Scope by Scope.Impl(iuDispacher) {
+    private val bgDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    uiDispacher: CoroutineDispatcher = Dispatchers.Main
+) : Scope by Scope.Impl(uiDispacher) {
 
-    fun doLogin(email: Email, password: Password) = launch {
+    fun doLogin(email: Email, password: Password) {
+        User.validate(email, password).fold(
+                { errors: Nel<ValidationErrors> ->
+                    view?.showError(errors.toList())
+                },
+                { user: User ->
+                    doLogin(user)
+                }
+        )
+    }
+
+    private fun doLogin(user: User) = launch {
         view?.showLoading()
-        val user = User(email, password)
-        val login = withContext(ioDispatcher) { login(user) }
+        val login = withContext(bgDispatcher) { login(user) }
         view?.hideLoading()
         login.fold(
-                { view?.showLoginError(it) },
+                { view?.showError(it) },
                 { view?.navigateToLoggedScreen() }
         )
     }
 
     fun onStart() = launch {
         view?.showLoading()
-        val isLogged = withContext(ioDispatcher) { isLoginStored() }
+        val isLogged = withContext(bgDispatcher) { isLoginStored() }
         view?.hideLoading()
         isLogged.fold(
                 { view?.showLoginForm() },
