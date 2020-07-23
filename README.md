@@ -18,6 +18,12 @@ Since the API is not ready a Fake implementation of the API client will be provi
 The local storage for the login information is implemented using a Repository pattern. With the requirements we already have, the data source we will use will be Android Shared Preferences since is a simple solution, but in the future could be replaced by a database implementation, to make this change easier we will use Repository pattern, to abstract the business logic from the real data source and allow to replace data source implementation fast and smooth.
 Since the data source is implemented with Shared Preferences over Android SDK, instrumentation tests will be required to test its correct working.
 
+For the domain layer, Command pattern has been used as use cases. They are responsible to execute all business logic.
+
+For the threading problem, kotlinx.Coroutines are the solution chosen as Interactors since they are a fancy and most common way to implement the Interactors nowadays.
+
+For the presentation layer, MVP pattern is the chosen implementation because is the most familiar implementation for the development team, we could consider moving to MVVM with data binding, but our expertise and confidence with MVP make us feel more comfortable. 
+
 ## CI
 
 Several CI checks are set up yo guarantee code style and code quality standards are fulfilled.
