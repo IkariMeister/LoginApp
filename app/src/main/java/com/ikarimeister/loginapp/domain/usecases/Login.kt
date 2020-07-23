@@ -13,7 +13,7 @@ class Login(
     private val apiClient: LoginApiClient = Companion.apiClient,
     private val repository: TokenRepository = Companion.repository
 ) {
-    operator fun invoke(user: User): Either<LoginError, Token> = Either.fx {
+    suspend operator fun invoke(user: User): Either<LoginError, Token> = Either.fx {
         val token = apiClient.login(user).bind()
         repository + token
         token
