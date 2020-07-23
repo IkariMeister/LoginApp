@@ -6,6 +6,7 @@ import arrow.core.right
 import com.ikarimeister.loginapp.data.LoginApiClient
 import com.ikarimeister.loginapp.data.TokenRepository
 import com.ikarimeister.loginapp.domain.model.*
+import com.ikarimeister.loginapp.utils.MotherObject
 import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockkClass
@@ -36,44 +37,37 @@ class LoginTest {
     fun `Should return a LoginError when LoginApiClient returns any login error`() = runBlocking {
         every { stubApiClient.login(any()) } returns NoConection.left()
 
-        val actual = sut.invoke(user)
+        val actual = sut.invoke(MotherObject.user)
 
         assertTrue(actual is Either.Left<LoginError>)
     }
 
     @Test
     fun `Should return a Token when LoginApiClient returns a Token`() = runBlocking {
-        every { stubApiClient.login(any()) } returns token.right()
-        every { mockRepository.plus(token) } returns Unit.right()
+        every { stubApiClient.login(any()) } returns MotherObject.token.right()
+        every { mockRepository.plus(MotherObject.token) } returns Unit.right()
 
-        val actual = sut.invoke(user)
+        val actual = sut.invoke(MotherObject.user)
 
-        assertEquals(token.right(), actual)
+        assertEquals(MotherObject.token.right(), actual)
     }
 
     @Test
     fun `Should save nothing on the repository when LoginApiClient returns any login error`() = runBlocking {
         every { stubApiClient.login(any()) } returns NoConection.left()
 
-        sut.invoke(user)
+        sut.invoke(MotherObject.user)
 
         verify { mockRepository wasNot Called }
     }
 
     @Test
     fun `Should save on repository a Token when LoginApiClient returns a Token`() = runBlocking {
-        every { stubApiClient.login(any()) } returns token.right()
-        every { mockRepository.plus(token) } returns Unit.right()
+        every { stubApiClient.login(any()) } returns MotherObject.token.right()
+        every { mockRepository.plus(MotherObject.token) } returns Unit.right()
 
-        sut.invoke(user)
+        sut.invoke(MotherObject.user)
 
-        verify { mockRepository + token }
-    }
-
-    companion object {
-        private val email = Email("john.doe@company.com")
-        private val password = Password("123456")
-        private val token = Token("fdskjflsdjflsdjf")
-        private val user = User(email, password)
+        verify { mockRepository + MotherObject.token }
     }
 }

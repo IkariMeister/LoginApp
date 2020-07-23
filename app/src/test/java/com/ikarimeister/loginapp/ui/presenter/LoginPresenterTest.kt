@@ -6,6 +6,9 @@ import com.ikarimeister.loginapp.domain.model.*
 import com.ikarimeister.loginapp.domain.usecases.IsLoginStored
 import com.ikarimeister.loginapp.domain.usecases.Login
 import com.ikarimeister.loginapp.ui.view.LoginView
+import com.ikarimeister.loginapp.utils.MotherObject.email
+import com.ikarimeister.loginapp.utils.MotherObject.password
+import com.ikarimeister.loginapp.utils.MotherObject.token
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -101,12 +104,5 @@ class LoginPresenterTest {
         every { view.hideLoading() } returns Unit
         every { view.showLoginError(any()) } returns Unit
         every { view.navigateToLoggedScreen() } returns Unit
-    }
-
-    companion object {
-        private val email = Email("john.doe@company.com")
-        private val password = Password("123456")
-        private val token = Token("fdskjflsdjflsdjf")
-        private val user = User(email, password)
     }
 }
