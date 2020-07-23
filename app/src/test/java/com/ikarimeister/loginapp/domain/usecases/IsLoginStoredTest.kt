@@ -7,6 +7,7 @@ import com.ikarimeister.loginapp.data.TokenRepository
 import com.ikarimeister.loginapp.domain.model.StorageError
 import com.ikarimeister.loginapp.domain.model.Token
 import com.ikarimeister.loginapp.domain.model.TokenNotFound
+import com.ikarimeister.loginapp.utils.MotherObject.token
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -45,9 +46,5 @@ class IsLoginStoredTest {
 
         Assert.assertTrue(actual is Either.Right<Token>)
         actual.map { Assert.assertEquals(token, it) }
-    }
-
-    companion object {
-        val token = Token("fkdsfjlsdfjlsfjk")
     }
 }

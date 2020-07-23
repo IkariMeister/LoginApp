@@ -7,6 +7,7 @@ import com.ikarimeister.loginapp.data.local.TokenDataSource
 import com.ikarimeister.loginapp.domain.model.StorageError
 import com.ikarimeister.loginapp.domain.model.Token
 import com.ikarimeister.loginapp.domain.model.TokenNotFound
+import com.ikarimeister.loginapp.utils.MotherObject.token
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -18,11 +19,7 @@ import org.junit.Test
 
 class TokenRepositoryTest {
 
-    companion object {
-        const val ANY_TOKEN = "fdgfdgfdgfdhfghdf"
-    }
-
-    lateinit var repository: TokenRepository
+    private lateinit var repository: TokenRepository
 
     @MockK
     lateinit var dataSource: TokenDataSource
@@ -35,7 +32,6 @@ class TokenRepositoryTest {
 
     @Test
     fun `Token is returned from datasource when datasource has a token`() {
-        val token = Token(ANY_TOKEN)
         every { dataSource.get() } returns token.right()
 
         val actual = repository.get()
