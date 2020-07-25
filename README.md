@@ -11,7 +11,7 @@ Simple login
 
 This repository contains an Android application that allows user to perform a log in and log out. The login will be persisted, so the user won't have to type their credentials every time the app will open.
 
-![UIpreview](docs/UIpreview.png) 
+![login_screen](screenshots/login_screen.png) 
 
 Since the API is not ready a Fake implementation of the API client will be provided. As the contract of the API is already defined, We will implement also a Real **ApiClient**, using retrofit, that will be tested using **HttpStubbing** with _MockWebServer_.
 
@@ -76,6 +76,9 @@ object NotAnEmail : EmailValidationErrors()
 object NotValidCharsInEmail : EmailValidationErrors()
 object TooLongEmail : EmailValidationErrors()
 ```
+
+UI is implemented by Activities extending the correspondent **View** to fulfill **MVP** pattern. The UI is tested by `espresso` with the syntactic sugar of `barista`.
+It's intending to test UI with **ScreenShot Testing** also by using `shot`.
 
 ## CI
 

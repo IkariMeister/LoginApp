@@ -18,10 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
-import org.koin.core.context.unloadKoinModules
-import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
