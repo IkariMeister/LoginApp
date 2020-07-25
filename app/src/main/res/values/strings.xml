@@ -13,4 +13,6 @@
     <string name="too_long_email">Email cannot be >255 characters</string>
     <string name="too_long_password">Password cannot be >16 characters</string>
     <string name="too_short_password">Password should be >6 characters</string>
+    <string name="no_connection">Connection is unavailable at this momment, please retry later</string>
+    <string name="retry">Retry</string>
 </resources>
