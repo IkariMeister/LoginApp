@@ -1,18 +1,16 @@
 package com.ikarimeister.loginapp.data.local
 
-import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import com.ikarimeister.loginapp.LoginApp
 import com.ikarimeister.loginapp.domain.model.StorageError
 import com.ikarimeister.loginapp.domain.model.Token
 import com.ikarimeister.loginapp.domain.model.TokenNotFound
 
 class SharedPreferencesTokenDataSource(
-    private val preferences: SharedPreferences = Companion.preferences
+    private val preferences: SharedPreferences
 ) : TokenDataSource {
     override fun get(): Either<StorageError, Token> =
             if (preferences.contains(ID)) {
@@ -31,6 +29,5 @@ class SharedPreferencesTokenDataSource(
 
     companion object {
         const val ID = "token"
-        val preferences: SharedPreferences by lazy { LoginApp.instance.getSharedPreferences(ID, MODE_PRIVATE)!! }
     }
 }

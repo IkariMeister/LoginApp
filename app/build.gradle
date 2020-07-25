@@ -47,6 +47,8 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.google.code.gson:gson:$gson_version"
+    implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-androidx-scope:$koin_version"
 
     testImplementation "junit:junit:$junit_version"
     testImplementation "io.kotlintest:kotlintest:$kotlintest_version"
@@ -54,6 +56,7 @@ dependencies {
     testImplementation "com.squareup.okhttp3:mockwebserver:$mockwebserver_version"
     testImplementation "commons-io:commons-io:$commonsio_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    androidTestImplementation "org.koin:koin-test:$koin_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     androidTestImplementation "androidx.test:runner:$espressorunner_version"
     androidTestImplementation "androidx.test.ext:junit:1.1.1"

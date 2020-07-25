@@ -10,7 +10,6 @@ import com.ikarimeister.loginapp.domain.usecases.Login
 import com.ikarimeister.loginapp.ui.coomons.Scope
 import com.ikarimeister.loginapp.ui.view.LoginView
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -18,8 +17,8 @@ class LoginPresenter(
     private val view: LoginView?,
     private val login: Login,
     private val isLoginStored: IsLoginStored,
-    private val bgDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    uiDispacher: CoroutineDispatcher = Dispatchers.Main
+    private val bgDispatcher: CoroutineDispatcher,
+    uiDispacher: CoroutineDispatcher
 ) : Scope by Scope.Impl(uiDispacher) {
 
     fun doLogin(email: Email, password: Password) {
