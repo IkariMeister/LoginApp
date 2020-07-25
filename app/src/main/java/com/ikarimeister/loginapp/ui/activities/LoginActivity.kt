@@ -3,11 +3,20 @@ package com.ikarimeister.loginapp.ui.activities
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.ikarimeister.loginapp.R
 import com.ikarimeister.loginapp.databinding.ActivityLoginBinding
 import com.ikarimeister.loginapp.domain.model.Email
+import com.ikarimeister.loginapp.domain.model.EmailValidationErrors
 import com.ikarimeister.loginapp.domain.model.LoginError
+import com.ikarimeister.loginapp.domain.model.NotAnEmail
+import com.ikarimeister.loginapp.domain.model.NotValidCharsInEmail
 import com.ikarimeister.loginapp.domain.model.Password
+import com.ikarimeister.loginapp.domain.model.PasswordValidationErrors
+import com.ikarimeister.loginapp.domain.model.TooLongEmail
+import com.ikarimeister.loginapp.domain.model.TooLongPassword
+import com.ikarimeister.loginapp.domain.model.TooShortPassword
 import com.ikarimeister.loginapp.domain.model.ValidationErrors
+import com.ikarimeister.loginapp.ui.model.ValidationMessage
 import com.ikarimeister.loginapp.ui.presenter.LoginPresenter
 import com.ikarimeister.loginapp.ui.view.LoginView
 import org.koin.androidx.scope.lifecycleScope
@@ -45,7 +54,27 @@ class LoginActivity : AppCompatActivity(), LoginView {
     }
 
     override fun showError(errors: List<ValidationErrors>) {
-        TODO()
+        val messages = errors.fold(ValidationMessage()) { acc, element ->
+            when (element) {
+                is EmailValidationErrors -> {
+                    val message = when (element) {
+                        NotAnEmail -> R.string.not_an_email
+                        NotValidCharsInEmail -> R.string.not_valid_email
+                        TooLongEmail -> R.string.too_long_email
+                    }
+                    acc.copy(emailError = "${getString(message)}\n${acc.emailError}".trim())
+                }
+                is PasswordValidationErrors -> {
+                    val message = when (element) {
+                        TooLongPassword -> R.string.too_long_password
+                        TooShortPassword -> R.string.too_short_password
+                    }
+                    acc.copy(passwordError = "${acc.passwordError}\n${getString(message)}")
+                }
+            }
+        }
+        binding.error.visibility = View.VISIBLE
+        binding.error.text = "${messages.passwordError}\n${messages.emailError}".trim()
     }
 
     override fun navigateToLoggedScreen() {
@@ -54,6 +83,7 @@ class LoginActivity : AppCompatActivity(), LoginView {
 
     override fun showLoginForm() {
         binding.loading.visibility = View.GONE
+        binding.error.visibility = View.GONE
         binding.login.visibility = View.VISIBLE
         binding.password.visibility = View.VISIBLE
         binding.imageView.visibility = View.VISIBLE

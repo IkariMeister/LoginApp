@@ -13,6 +13,8 @@ import com.ikarimeister.loginapp.ui.presenter.LoginPresenter
 import com.ikarimeister.loginapp.ui.view.LoginView
 import com.ikarimeister.loginapp.utils.di.resetDI
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions
+import com.schibsted.spain.barista.interaction.BaristaClickInteractions
+import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -54,6 +56,24 @@ class LoginActivityTest : ActivityTest<LoginActivity>(LoginActivity::class.java)
         BaristaVisibilityAssertions.assertDisplayed(R.id.password)
         BaristaVisibilityAssertions.assertDisplayed(R.id.username)
         BaristaVisibilityAssertions.assertDisplayed(R.id.imageView)
+        BaristaVisibilityAssertions.assertNotDisplayed(R.id.error)
+        BaristaVisibilityAssertions.assertNotDisplayed(R.id.loading)
+    }
+
+    @Test
+    fun showValidationErrorsWhenTokenIsNotStoredAndInputDataIsInvalid() {
+        coEvery { isLoginStored() } returns TokenNotFound.left()
+
+        startActivity()
+        BaristaEditTextInteractions.writeTo(R.id.username, "not An Email")
+        BaristaEditTextInteractions.writeTo(R.id.password, "A really too long password, really really long")
+        BaristaClickInteractions.clickOn(R.id.login)
+
+        BaristaVisibilityAssertions.assertDisplayed(R.id.login)
+        BaristaVisibilityAssertions.assertDisplayed(R.id.password)
+        BaristaVisibilityAssertions.assertDisplayed(R.id.username)
+        BaristaVisibilityAssertions.assertDisplayed(R.id.imageView)
+        BaristaVisibilityAssertions.assertDisplayed(R.id.error)
         BaristaVisibilityAssertions.assertNotDisplayed(R.id.loading)
     }
 }
