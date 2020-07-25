@@ -13,10 +13,10 @@ This repository contains an Android application that allows user to perform a lo
 
 ![UIpreview](docs/UIpreview.png) 
 
-Since the API is not ready a Fake implementation of the API client will be provided. As the contract of the API is already defined, We will implement also a Real ApiClient, using retrofit, that will be tested using **HttpStubbing** with _MockWebServer_.
+Since the API is not ready a Fake implementation of the API client will be provided. As the contract of the API is already defined, We will implement also a Real **ApiClient**, using retrofit, that will be tested using **HttpStubbing** with _MockWebServer_.
 
-The local storage for the login information is implemented using a Repository pattern. With the requirements we already have, the data source we will use will be Android Shared Preferences since is a simple solution, but in the future could be replaced by a database implementation, to make this change easier we will use Repository pattern, to abstract the business logic from the real data source and allow to replace data source implementation fast and smooth.
-Since the data source is implemented with Shared Preferences over Android SDK, instrumentation tests will be required to test its correct working. The error hierarchy is:
+The local storage for the login information is implemented using a **Repository** pattern. With the requirements we already have, the data source we will use will be Android Shared Preferences since is a simple solution, but in the future could be replaced by a database implementation, to make this change easier we will use Repository pattern, to abstract the business logic from the real data source and allow to replace data source implementation fast and smooth.
+Since the data source is implemented with `Shared Preferences` over Android SDK, instrumentation tests will be required to test its correct working. The error hierarchy is:
 
 ```kotlin
 Either<StorageError, Token>
@@ -25,7 +25,7 @@ sealed class StorageError
 object TokenNotFound : StorageError()
 data class UnknownStorageError(val t: Throwable) : StorageError()
 ```
-For the domain layer, Command pattern has been used as use cases. They are responsible to execute all business logic. Login use case has his own hierarchy error like this:
+For the **domain layer**, **Command** pattern has been used as use cases. They are responsible to execute all business logic. Login use case has his own hierarchy error like this:
 
 ```kotlin
 Either<LoginError, Token>
@@ -36,11 +36,13 @@ object NoConection : LoginError()
 object IncorrectCredentials : LoginError()
 ```
 
-For the threading problem, kotlinx.Coroutines are the solution chosen as Interactors since they are a fancy and most common way to implement the Interactors nowadays.
+For the threading problem, `kotlinx.Coroutines` are the solution chosen as **Interactors** since they are a fancy and most common way to implement the Interactors nowadays.
 
-For the presentation layer, MVP pattern is the chosen implementation because is the most familiar implementation for the development team, we could consider moving to MVVM with data binding, but our expertise and confidence with MVP make us feel more comfortable.
+For the presentation layer, **MVP** pattern is the chosen implementation because is the most familiar implementation for the development team, we could consider moving to **MVVM** with data binding, but our expertise and confidence with MVP make us feel more comfortable.
 
-User validation has been implemented by using ValidatedNel applicative from _arrow_ library. The validation process will be accumulative and will show all errors found.
+`Koin` has been used as a Dependency provider, thought `Koin` is not a **DI framework**, it fits well with providing the needs of this project by now as Service Locator. If the project scales to much migrating to real DI frameworks like `Kodein` or `Dagger` would be recommended but `Koin simplicity benefits are enough to use it at this time.
+
+User validation has been implemented by using `ValidatedNel` applicative from `Arrow` library. The validation process will be accumulative and will show all errors found.
 
 Rules that have been implemented are:
 * Email length less than 256 characters,
