@@ -49,7 +49,7 @@
             android:text="@string/action_sign_in"
             app:layout_constraintTop_toBottomOf="@+id/password"
             app:layout_constraintStart_toStartOf="@id/password"
-            app:layout_constraintEnd_toEndOf="@id/midlle_horizontal"
+            app:layout_constraintEnd_toEndOf="@id/middle_horizontal"
             android:textColor="@color/primaryTextColor"
             android:background="@color/primaryColor"
             android:layout_marginTop="48dp"
@@ -85,21 +85,23 @@
     <androidx.constraintlayout.widget.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/midlle_horizontal"
+        android:id="@+id/middle_horizontal"
         app:layout_constraintGuide_percent="0.5"
         android:orientation="vertical"/>
-    <androidx.constraintlayout.widget.Guideline
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/start_image"
-        app:layout_constraintGuide_percent="0.33"
-        android:orientation="vertical"/>
-    <androidx.constraintlayout.widget.Guideline
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/end_image"
-        app:layout_constraintGuide_percent="0.66"
-        android:orientation="vertical"/>
+    <TextView android:layout_width="0dp"
+              android:layout_height="0dp"
+              app:layout_constraintTop_toBottomOf="@id/imageView"
+              android:layout_marginTop="@dimen/activity_vertical_margin"
+              android:layout_marginBottom="@dimen/activity_vertical_margin"
+              app:layout_constraintBottom_toTopOf="@id/username"
+              app:layout_constraintStart_toStartOf="@id/username"
+              app:layout_constraintEnd_toEndOf="@id/username"
+              android:gravity="bottom"
+              android:textColor="@color/secondaryColor"
+              android:id="@+id/error"
+              app:layout_constraintVertical_bias="0.7"
+    />
+
 
     <androidx.constraintlayout.widget.Guideline
         android:layout_width="wrap_content"
