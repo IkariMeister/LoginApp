@@ -2,9 +2,7 @@ package com.ikarimeister.loginapp.ui.activities
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.ikarimeister.loginapp.R
 import com.ikarimeister.loginapp.databinding.ActivityLoginBinding
 import com.ikarimeister.loginapp.domain.model.Email
 import com.ikarimeister.loginapp.domain.model.LoginError
@@ -12,11 +10,13 @@ import com.ikarimeister.loginapp.domain.model.Password
 import com.ikarimeister.loginapp.domain.model.ValidationErrors
 import com.ikarimeister.loginapp.ui.presenter.LoginPresenter
 import com.ikarimeister.loginapp.ui.view.LoginView
+import org.koin.androidx.scope.lifecycleScope
+import org.koin.core.parameter.parametersOf
 
 class LoginActivity : AppCompatActivity(), LoginView {
 
     private val binding: ActivityLoginBinding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
-    private val presenter: LoginPresenter by lazy { LoginPresenter(this) }
+    private val presenter: LoginPresenter by lifecycleScope.inject { parametersOf(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,12 +41,15 @@ class LoginActivity : AppCompatActivity(), LoginView {
     }
 
     override fun showError(error: LoginError) {
+        TODO()
     }
 
     override fun showError(errors: List<ValidationErrors>) {
+        TODO()
     }
 
     override fun navigateToLoggedScreen() {
+        TODO()
     }
 
     override fun showLoginForm() {
