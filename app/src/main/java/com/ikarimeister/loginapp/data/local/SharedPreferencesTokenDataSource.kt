@@ -8,7 +8,6 @@ import arrow.core.right
 import com.ikarimeister.loginapp.domain.model.StorageError
 import com.ikarimeister.loginapp.domain.model.Token
 import com.ikarimeister.loginapp.domain.model.TokenNotFound
-import java.lang.Thread.sleep
 
 class SharedPreferencesTokenDataSource(
     private val preferences: SharedPreferences

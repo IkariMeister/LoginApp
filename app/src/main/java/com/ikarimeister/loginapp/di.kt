@@ -10,6 +10,7 @@ import com.ikarimeister.loginapp.data.network.FakeLoginApiClient
 import com.ikarimeister.loginapp.domain.usecases.IsLoginStored
 import com.ikarimeister.loginapp.domain.usecases.Login
 import com.ikarimeister.loginapp.domain.usecases.Logout
+import com.ikarimeister.loginapp.ui.activities.LoginActivity
 import com.ikarimeister.loginapp.ui.presenter.LoginPresenter
 import com.ikarimeister.loginapp.ui.view.LoginView
 import kotlinx.coroutines.CoroutineDispatcher
@@ -17,7 +18,10 @@ import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
+import org.koin.core.context.unloadKoinModules
+import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -44,8 +48,8 @@ val dataModule = module {
 }
 
 val scopesModule = module {
-    scope(named("LoginScreen")) {
-        scoped { (view: LoginView) ->
+    scope(named<LoginActivity>()) {
+        factory { (view: LoginView) ->
             LoginPresenter(view, get(), get(), get(named("BG")), get(named("UI")))
         }
         scoped { Login(get(), get()) }
