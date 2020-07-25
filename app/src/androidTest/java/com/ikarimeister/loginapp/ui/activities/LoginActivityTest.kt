@@ -4,6 +4,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import arrow.core.left
 import com.ikarimeister.loginapp.R
 import com.ikarimeister.loginapp.asApp
+import com.ikarimeister.loginapp.domain.model.IncorrectCredentials
+import com.ikarimeister.loginapp.domain.model.NoConection
 import com.ikarimeister.loginapp.domain.model.TokenNotFound
 import com.ikarimeister.loginapp.domain.usecases.IsLoginStored
 import com.ikarimeister.loginapp.domain.usecases.Login
@@ -75,5 +77,43 @@ class LoginActivityTest : ActivityTest<LoginActivity>(LoginActivity::class.java)
         BaristaVisibilityAssertions.assertDisplayed(R.id.imageView)
         BaristaVisibilityAssertions.assertDisplayed(R.id.error)
         BaristaVisibilityAssertions.assertNotDisplayed(R.id.loading)
+    }
+
+    @Test
+    fun showIncorrectCredentialsMessageWhenApiReturnANotValidLoginResponse() {
+        coEvery { isLoginStored() } returns TokenNotFound.left()
+        coEvery { loginMock(any()) } returns IncorrectCredentials.left()
+
+        val context = startActivity()
+        BaristaEditTextInteractions.writeTo(R.id.username, "john.doe@company.com")
+        BaristaEditTextInteractions.writeTo(R.id.password, "123456")
+        BaristaClickInteractions.clickOn(R.id.login)
+
+        BaristaVisibilityAssertions.assertDisplayed(R.id.login)
+        BaristaVisibilityAssertions.assertDisplayed(R.id.password)
+        BaristaVisibilityAssertions.assertDisplayed(R.id.username)
+        BaristaVisibilityAssertions.assertDisplayed(R.id.imageView)
+        BaristaVisibilityAssertions.assertDisplayed(R.id.error)
+        BaristaVisibilityAssertions.assertNotDisplayed(R.id.loading)
+        BaristaVisibilityAssertions.assertDisplayed(context.getString(R.string.login_failed))
+    }
+
+    @Test
+    fun showSnackBarWhenThereIsNoConnection() {
+        coEvery { isLoginStored() } returns TokenNotFound.left()
+        coEvery { loginMock(any()) } returns NoConection.left()
+
+        val context = startActivity()
+        BaristaEditTextInteractions.writeTo(R.id.username, "john.doe@company.com")
+        BaristaEditTextInteractions.writeTo(R.id.password, "123456")
+        BaristaClickInteractions.clickOn(R.id.login)
+
+        BaristaVisibilityAssertions.assertDisplayed(R.id.login)
+        BaristaVisibilityAssertions.assertDisplayed(R.id.password)
+        BaristaVisibilityAssertions.assertDisplayed(R.id.username)
+        BaristaVisibilityAssertions.assertDisplayed(R.id.imageView)
+        BaristaVisibilityAssertions.assertNotDisplayed(R.id.error)
+        BaristaVisibilityAssertions.assertNotDisplayed(R.id.loading)
+        BaristaVisibilityAssertions.assertDisplayed(context.getString(R.string.no_connection))
     }
 }

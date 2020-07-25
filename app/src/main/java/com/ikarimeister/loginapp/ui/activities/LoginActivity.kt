@@ -3,11 +3,14 @@ package com.ikarimeister.loginapp.ui.activities
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import com.ikarimeister.loginapp.R
 import com.ikarimeister.loginapp.databinding.ActivityLoginBinding
 import com.ikarimeister.loginapp.domain.model.Email
 import com.ikarimeister.loginapp.domain.model.EmailValidationErrors
+import com.ikarimeister.loginapp.domain.model.IncorrectCredentials
 import com.ikarimeister.loginapp.domain.model.LoginError
+import com.ikarimeister.loginapp.domain.model.NoConection
 import com.ikarimeister.loginapp.domain.model.NotAnEmail
 import com.ikarimeister.loginapp.domain.model.NotValidCharsInEmail
 import com.ikarimeister.loginapp.domain.model.Password
@@ -50,7 +53,19 @@ class LoginActivity : AppCompatActivity(), LoginView {
     }
 
     override fun showError(error: LoginError) {
-        TODO()
+        when (error) {
+            IncorrectCredentials -> {
+                binding.error.text = getString(R.string.login_failed)
+                binding.error.visibility = View.VISIBLE
+            }
+            NoConection -> {
+                Snackbar.make(binding.root, R.string.no_connection, Snackbar.LENGTH_INDEFINITE)
+                        .setAction(R.string.retry) { loginClick() }
+                        .setBackgroundTint(resources.getColor(R.color.primaryDarkColor))
+                        .setActionTextColor(resources.getColor(R.color.primaryTextColor))
+                        .show()
+            }
+        }
     }
 
     override fun showError(errors: List<ValidationErrors>) {
@@ -88,10 +103,12 @@ class LoginActivity : AppCompatActivity(), LoginView {
         binding.password.visibility = View.VISIBLE
         binding.imageView.visibility = View.VISIBLE
         binding.username.visibility = View.VISIBLE
-        binding.login.setOnClickListener {
-            val email = Email(binding.username.text.toString())
-            val password = Password(binding.password.text.toString())
-            presenter.doLogin(email, password)
-        }
+        binding.login.setOnClickListener { loginClick() }
+    }
+
+    private fun loginClick() {
+        val email = Email(binding.username.text.toString())
+        val password = Password(binding.password.text.toString())
+        presenter.doLogin(email, password)
     }
 }
