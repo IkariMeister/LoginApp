@@ -21,6 +21,10 @@ class LoginPresenter(
     uiDispacher: CoroutineDispatcher
 ) : Scope by Scope.Impl(uiDispacher) {
 
+    init {
+        initScope()
+    }
+
     fun doLogin(email: Email, password: Password) {
         User.validate(email, password).fold(
                 { errors: Nel<ValidationErrors> ->
