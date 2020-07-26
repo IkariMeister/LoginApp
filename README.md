@@ -27,8 +27,8 @@ This repository contains an Android application that allows user to perform a lo
 
 Here you have some screenshots of the app:
 
-<img src="app/screenshots/Login.png" alt="login" width="240" height="400"/>      <img src="app/screenshots/Main.png" alt="main" width="240" height="400"/>
-<img src="app/screenshots/LoginUserPasswordError.png" alt="login" width="240" height="400"/>      <img src="app/screenshots/MainError.png" alt="main" width="240" height="400"/>
+<img src="app/screenshots/Login.png" alt="login" width="240" height="400"/>      <img src="app/screenshots/Main.png" alt="main" width="240" height="400"/>   <img src="app/screenshots/LoginUserPaswordError.png" alt="login" width="240" height="400"/>
+<img src="app/screenshots/MainError.png" alt="main" width="240" height="400"/>      <img src="app/screenshots/LoginIncorrect.png" alt="main" width="240" height="400"/>   <img src="app/screenshots/LoginConnectionError.png" alt="login" width="240" height="400"/>
 
 ### Data Layer
 [(Top)](#loginapp)
