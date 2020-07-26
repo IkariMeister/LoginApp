@@ -5,26 +5,50 @@
 [![Android CI](https://github.com/Ikarimeister/LoginApp/workflows/Android%20CI/badge.svg)](https://github.com/Ikarimeister/LoginApp/actions)
 [![Build Status](https://travis-ci.com/IkariMeister/LoginApp.svg?branch=master)](https://travis-ci.com/IkariMeister/LoginApp)
 
-Simple login 
+Simple login
+
+Table of contents
+=================
+
+<!--ts-->
+   * [Getting Started](#getting-started)
+      * [Data Layer](#data-layer)
+      * [Domain Layer](#domain-layer)
+      * [Presentation Layer](#presentation-layer)
+      * [UI Layer](#ui-layer)
+   * [CI](#ci)
+<!--te-->
+ 
 
 ## Getting Started
 
 This repository contains an Android application that allows user to perform a log in and log out. The login will be persisted, so the user won't have to type their credentials every time the app will open.
 
-![login_screen](screenshots/login_screen.png) 
+Here you have some screenshots of the app:
 
-Since the API is not ready a Fake implementation of the API client will be provided. As the contract of the API is already defined, We will implement also a Real **ApiClient**, using retrofit, that will be tested using **HttpStubbing** with _MockWebServer_.
+<img src="app/screenshots/loginScreen.png" alt="login" width="240" height="400"/>      <img src="app/screenshots/main_activity.png" alt="main" width="240" height="400"/>
 
-The local storage for the login information is implemented using a **Repository** pattern. With the requirements we already have, the data source we will use will be Android Shared Preferences since is a simple solution, but in the future could be replaced by a database implementation, to make this change easier we will use Repository pattern, to abstract the business logic from the real data source and allow to replace data source implementation fast and smooth.
-Since the data source is implemented with `Shared Preferences` over Android SDK, instrumentation tests will be required to test its correct working. The error hierarchy is:
+### Data Layer
 
-```kotlin
-Either<StorageError, Token>
-
-sealed class StorageError
-object TokenNotFound : StorageError()
-data class UnknownStorageError(val t: Throwable) : StorageError()
+Since the API is not ready a Fake implementation of the API client will be provided. As the contract of the API is already defined, We will implement also a Real **ApiClient**, using retrofit, that will be tested using **HttpStubbing** with `MockWebServer`.
+Request:
+```json
+{
+  "username": "john.doe@company.com",
+  "password": "123456"
+}
 ```
+Response:
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
+}
+```
+The local storage for the login information is implemented using a **Repository** pattern. With the requirements we already have, the data source we will use will be Android Shared Preferences since is a simple solution, but in the future could be replaced by a database implementation, to make this change easier we will use Repository pattern, to abstract the business logic from the real data source and allow to replace data source implementation fast and smooth.
+Since the data source is implemented with `Shared Preferences` over Android SDK, instrumentation tests will be required to test its correct working. 
+
+### Domain Layer
+
 For the **domain layer**, **Command** pattern has been used as use cases. They are responsible to execute all business logic. Login use case has his own hierarchy error like this:
 
 ```kotlin
@@ -36,11 +60,21 @@ object NoConection : LoginError()
 object IncorrectCredentials : LoginError()
 ```
 
+The error hierarchy for checkin if user is already logged is:
+
+```kotlin
+Either<StorageError, Token>
+
+sealed class StorageError
+object TokenNotFound : StorageError()
+data class UnknownStorageError(val t: Throwable) : StorageError()
+```
+
+### Presentation Layer
+
 For the threading problem, `kotlinx.Coroutines` are the solution chosen as **Interactors** since they are a fancy and most common way to implement the Interactors nowadays.
 
 For the presentation layer, **MVP** pattern is the chosen implementation because is the most familiar implementation for the development team, we could consider moving to **MVVM** with data binding, but our expertise and confidence with MVP make us feel more comfortable.
-
-`Koin` has been used as a Dependency provider, thought `Koin` is not a **DI framework**, it fits well with providing the needs of this project by now as Service Locator. If the project scales to much migrating to real DI frameworks like `Kodein` or `Dagger` would be recommended but `Koin simplicity benefits are enough to use it at this time.
 
 User validation has been implemented by using `ValidatedNel` applicative from `Arrow` library. The validation process will be accumulative and will show all errors found.
 
@@ -77,8 +111,23 @@ object NotValidCharsInEmail : EmailValidationErrors()
 object TooLongEmail : EmailValidationErrors()
 ```
 
+### UI Layer
+
 UI is implemented by Activities extending the correspondent **View** to fulfill **MVP** pattern. The UI is tested by `espresso` with the syntactic sugar of `barista`.
 It's intending to test UI with **ScreenShot Testing** also by using `shot`.
+
+For navigation, a function on the companion object of each activity has been added, who is the responsible to handle navegation:
+```kotlin
+companion object {
+        fun navigate(activity: Activity) {
+            activity.startActivity(Intent(activity, MainActivity::class.java))
+        }
+    }
+```
+
+### Dependency supplying
+
+`Koin` has been used as a Dependency provider, thought `Koin` is not a **DI framework**, it fits well with providing the needs of this project by now as Service Locator. If the project scales to much migrating to real DI frameworks like `Kodein` or `Dagger` would be recommended but `Koin simplicity benefits are enough to use it at this time.
 
 ## CI
 
