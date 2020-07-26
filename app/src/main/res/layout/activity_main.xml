@@ -13,10 +13,11 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        style="@style/TextAppearance.MaterialComponents.Headline4"
+        style="@style/Base.Widget.MaterialComponents.TextView"
         android:id="@+id/message"
         app:layout_constraintTop_toTopOf="@id/top_message"
-    />
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+        />
     <Button
         android:text="@string/action_sign_out"
         android:layout_width="0dp"
