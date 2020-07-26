@@ -69,8 +69,6 @@ class LoginActivity : AppCompatActivity(), LoginView {
             NoConection -> {
                 Snackbar.make(binding.root, R.string.no_connection, Snackbar.LENGTH_INDEFINITE)
                         .setAction(R.string.retry) { loginClick() }
-                        .setBackgroundTint(resources.getColor(R.color.primaryDarkColor))
-                        .setActionTextColor(resources.getColor(R.color.primaryTextColor))
                         .show()
             }
         }
@@ -96,8 +94,10 @@ class LoginActivity : AppCompatActivity(), LoginView {
                 }
             }
         }
-        binding.error.visibility = View.VISIBLE
-        binding.error.text = "${messages.passwordError}\n${messages.emailError}".trim()
+        binding.username.error = messages.emailError
+        binding.password.error = messages.passwordError
+//        binding.error.visibility = View.VISIBLE
+//        binding.error.text = "${messages.passwordError}\n${messages.emailError}".trim()
     }
 
     override fun navigateToLoggedScreen() {
@@ -115,8 +115,11 @@ class LoginActivity : AppCompatActivity(), LoginView {
     }
 
     private fun loginClick() {
-        val email = Email(binding.username.text.toString())
-        val password = Password(binding.password.text.toString())
+        val emptyString = ""
+        binding.username.error = emptyString
+        binding.password.error = emptyString
+        val email = Email(binding.username.editText?.text.toString())
+        val password = Password(binding.password.editText?.text.toString())
         presenter.doLogin(email, password)
     }
 }
