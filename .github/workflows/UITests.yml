@@ -28,8 +28,8 @@ jobs:
             script: ./gradlew testDebugUnitTest connectedAndroidTest
 
       - uses: actions/upload-artifact@v2
-        name: binaries
+        name: unit-test-reports
         with:
-          name: binary
+          name: unit-test-reports
           path: |
-            ./app/build/outputs/apk/debug/*.apk
+            ./app/build/reports

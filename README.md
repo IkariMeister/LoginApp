@@ -20,15 +20,18 @@ Table of contents
 <!--te-->
  
 
-## Getting Started
+## Getting Started 
+[(Top)](#loginapp)
 
 This repository contains an Android application that allows user to perform a log in and log out. The login will be persisted, so the user won't have to type their credentials every time the app will open.
 
 Here you have some screenshots of the app:
 
-<img src="app/screenshots/loginScreen.png" alt="login" width="240" height="400"/>      <img src="app/screenshots/main_activity.png" alt="main" width="240" height="400"/>
+<img src="app/screenshots/Login.png" alt="login" width="240" height="400"/>      <img src="app/screenshots/Main.png" alt="main" width="240" height="400"/>
+<img src="app/screenshots/LoginUserPasswordError.png" alt="login" width="240" height="400"/>      <img src="app/screenshots/MainError.png" alt="main" width="240" height="400"/>
 
 ### Data Layer
+[(Top)](#loginapp)
 
 Since the API is not ready a Fake implementation of the API client will be provided. As the contract of the API is already defined, We will implement also a Real **ApiClient**, using retrofit, that will be tested using **HttpStubbing** with `MockWebServer`.
 Request:
@@ -48,6 +51,7 @@ The local storage for the login information is implemented using a **Repository*
 Since the data source is implemented with `Shared Preferences` over Android SDK, instrumentation tests will be required to test its correct working. 
 
 ### Domain Layer
+[(Top)](#loginapp)
 
 For the **domain layer**, **Command** pattern has been used as use cases. They are responsible to execute all business logic. Login use case has his own hierarchy error like this:
 
@@ -71,6 +75,7 @@ data class UnknownStorageError(val t: Throwable) : StorageError()
 ```
 
 ### Presentation Layer
+[(Top)](#loginapp)
 
 For the threading problem, `kotlinx.Coroutines` are the solution chosen as **Interactors** since they are a fancy and most common way to implement the Interactors nowadays.
 
@@ -112,6 +117,7 @@ object TooLongEmail : EmailValidationErrors()
 ```
 
 ### UI Layer
+[(Top)](#loginapp)
 
 UI is implemented by Activities extending the correspondent **View** to fulfill **MVP** pattern. The UI is tested by `espresso` with the syntactic sugar of `barista`.
 It's intending to test UI with **ScreenShot Testing** also by using `shot`.
@@ -124,18 +130,22 @@ companion object {
         }
     }
 ```
+Styles and theming has been defined following `Material Design` design system. For further information check [Material Design Page](https://material.io/)
+
 
 ### Dependency supplying
+[(Top)](#loginapp)
 
 `Koin` has been used as a Dependency provider, thought `Koin` is not a **DI framework**, it fits well with providing the needs of this project by now as Service Locator. If the project scales to much migrating to real DI frameworks like `Kodein` or `Dagger` would be recommended but `Koin simplicity benefits are enough to use it at this time.
 
-## CI
+## CI 
+[(Top)](#loginapp)
 
 Several CI checks are set up yo guarantee code style and code quality standards are fulfilled.
 
-* **_Android Checkstyle and Unit Test_**: this GitHub Action will check the code style on every push and pull request by using **ktlint** and **detekt**. It also run Unit tests. The report can be found as an artifact for this action.
+* **_Android Checkstyle and Unit Test_**: this GitHub Action will check the code style on every push and pull request by using `ktlint` and `detekt`. It also run Unit tests. The report can be found as an artifact for this action.
 * **_Android CI_**: this GitHub Action will assemble the debug binaries on every pull request. Those binaries can be found as binaries artifact on the action.
 * **_labeler_**: GitHub Action to check on pull request, the size of the pull request categorizing them in sizes according to the number of lines modified. It will fail if the pull request has more than 1000 lines modified.
-* **_Travis CI_**: TravisCI will be used on pull requests to run heavier tests, like UI tests, to not delay checks on pushes.
+* **_Android Test_**: TravisCI will be used on pull requests to run heavier tests, like UI tests, to not delay checks on pushes.
 
 
