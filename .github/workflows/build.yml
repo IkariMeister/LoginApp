@@ -31,4 +31,4 @@ jobs:
         path: |
           ./app/build/outputs/apk/debug/*.apk
     - name: "Run UI Tests"
-      uses: faruktoptas/android-github-actions-emulator@1.1.0
+      uses: faruktoptas/android-github-actions-emulator@latest
