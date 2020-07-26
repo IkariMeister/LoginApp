@@ -1,5 +1,7 @@
 package com.ikarimeister.loginapp.ui.activities
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +28,12 @@ import org.koin.androidx.scope.lifecycleScope
 import org.koin.core.parameter.parametersOf
 
 class LoginActivity : AppCompatActivity(), LoginView {
+
+    companion object {
+        fun navigate(activity: Activity) {
+            activity.startActivity(Intent(activity, LoginActivity::class.java))
+        }
+    }
 
     private val binding: ActivityLoginBinding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
     private val presenter: LoginPresenter by lifecycleScope.inject { parametersOf(this) }
@@ -93,7 +101,7 @@ class LoginActivity : AppCompatActivity(), LoginView {
     }
 
     override fun navigateToLoggedScreen() {
-        TODO()
+        MainActivity.navigate(this)
     }
 
     override fun showLoginForm() {

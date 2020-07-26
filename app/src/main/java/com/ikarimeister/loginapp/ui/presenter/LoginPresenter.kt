@@ -1,5 +1,8 @@
 package com.ikarimeister.loginapp.ui.presenter
 
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import arrow.core.Nel
 import com.ikarimeister.loginapp.domain.model.Email
 import com.ikarimeister.loginapp.domain.model.Password
@@ -19,10 +22,9 @@ class LoginPresenter(
     private val isLoginStored: IsLoginStored,
     private val bgDispatcher: CoroutineDispatcher,
     uiDispacher: CoroutineDispatcher
-) : Scope by Scope.Impl(uiDispacher) {
-
+) : LifecycleObserver, Scope by Scope.Impl(uiDispacher) {
     init {
-        initScope()
+        startPresenter()
     }
 
     fun doLogin(email: Email, password: Password) {
@@ -54,5 +56,15 @@ class LoginPresenter(
                 { view?.showLoginForm() },
                 { view?.navigateToLoggedScreen() }
         )
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun startPresenter() {
+        initScope()
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun stopPresenter() {
+        super.destroyScope()
     }
 }

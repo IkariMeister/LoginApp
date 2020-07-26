@@ -11,8 +11,11 @@ import com.ikarimeister.loginapp.domain.usecases.IsLoginStored
 import com.ikarimeister.loginapp.domain.usecases.Login
 import com.ikarimeister.loginapp.domain.usecases.Logout
 import com.ikarimeister.loginapp.ui.activities.LoginActivity
+import com.ikarimeister.loginapp.ui.activities.MainActivity
 import com.ikarimeister.loginapp.ui.presenter.LoginPresenter
+import com.ikarimeister.loginapp.ui.presenter.MainPresenter
 import com.ikarimeister.loginapp.ui.view.LoginView
+import com.ikarimeister.loginapp.ui.view.MainView
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidApplication
@@ -52,7 +55,10 @@ val scopesModule = module {
         scoped { Login(get(), get()) }
         scoped { IsLoginStored(get()) }
     }
-    scope(named("MainScreen")) {
+    scope(named<MainActivity>()) {
+        factory { (view: MainView) ->
+            MainPresenter(view, get(), get(named("BG")), get(named("UI")))
+        }
         scoped { Logout(get()) }
     }
 }
