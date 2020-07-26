@@ -45,8 +45,9 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.core:core-ktx:$corektx_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation "com.google.android.material:material:$material_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewmodel_version"
     implementation "io.arrow-kt:arrow-core-data:$arrow_version"
     implementation "io.arrow-kt:arrow-fx:$arrow_version"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
@@ -54,9 +55,7 @@ dependencies {
     implementation "com.google.code.gson:gson:$gson_version"
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-androidx-scope:$koin_version"
-
-    implementation 'com.google.android.material:material:1.1.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     testImplementation "junit:junit:$junit_version"
     testImplementation "io.kotlintest:kotlintest:$kotlintest_version"
     testImplementation "io.mockk:mockk:$mockk_version"
@@ -64,10 +63,10 @@ dependencies {
     testImplementation "commons-io:commons-io:$commonsio_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
     androidTestImplementation "io.mockk:mockk-android:$mockk_version"
-    androidTestImplementation 'com.github.tmurakami:dexopener:2.0.5'
+    androidTestImplementation "com.github.tmurakami:dexopener:$dexopener_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     androidTestImplementation "androidx.test:runner:$espressorunner_version"
-    androidTestImplementation "androidx.test.ext:junit:1.1.1"
+    androidTestImplementation "androidx.test.ext:junit:$junit_android_version"
     androidTestImplementation "androidx.test:rules:$espressorunner_version"
     androidTestImplementation("com.schibsted.spain:barista:$barista_version") {
         exclude group: 'org.jetbrains.kotlin' // Only if you already use Kotlin in your project

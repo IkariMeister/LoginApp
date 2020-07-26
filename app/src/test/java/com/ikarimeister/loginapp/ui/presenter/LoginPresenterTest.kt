@@ -38,12 +38,12 @@ class LoginPresenterTest {
     fun setUp() {
         MockKAnnotations.init(this)
         presenter = LoginPresenter(view, login, islogged, Dispatchers.Unconfined, Dispatchers.Unconfined)
-        presenter.initScope()
+        presenter.startPresenter()
     }
 
     @After
     fun tearDown() {
-        presenter.destroyScope()
+        presenter.stopPresenter()
     }
 
     @Test
