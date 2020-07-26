@@ -22,10 +22,10 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: "Run UI Tests"
-          uses: reactivecircus/android-emulator-runner@v2
-          with:
-            api-level: 29
-            script: ./gradlew testDebugUnitTest connectedAndroidTest
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          script: ./gradlew testDebugUnitTest connectedAndroidTest
 
       - uses: actions/upload-artifact@v2
         name: unit-test-reports
