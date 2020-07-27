@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity(), MainView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        lifecycle.addObserver(presenter)
         binding.logout.setOnClickListener { presenter.doLogout() }
     }
 

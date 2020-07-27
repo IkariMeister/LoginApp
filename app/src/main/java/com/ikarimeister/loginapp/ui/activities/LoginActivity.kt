@@ -41,6 +41,7 @@ class LoginActivity : AppCompatActivity(), LoginView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        lifecycle.addObserver(presenter)
         presenter.onStart()
     }
 
@@ -96,8 +97,6 @@ class LoginActivity : AppCompatActivity(), LoginView {
         }
         binding.username.error = messages.emailError
         binding.password.error = messages.passwordError
-//        binding.error.visibility = View.VISIBLE
-//        binding.error.text = "${messages.passwordError}\n${messages.emailError}".trim()
     }
 
     override fun navigateToLoggedScreen() {

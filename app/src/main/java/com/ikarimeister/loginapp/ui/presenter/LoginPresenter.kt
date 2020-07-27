@@ -4,6 +4,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import arrow.core.Nel
+import com.ikarimeister.loginapp.commons.weak
 import com.ikarimeister.loginapp.domain.model.Email
 import com.ikarimeister.loginapp.domain.model.Password
 import com.ikarimeister.loginapp.domain.model.User
@@ -17,12 +18,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class LoginPresenter(
-    private val view: LoginView?,
+    view: LoginView,
     private val login: Login,
     private val isLoginStored: IsLoginStored,
     private val bgDispatcher: CoroutineDispatcher,
     uiDispacher: CoroutineDispatcher
 ) : LifecycleObserver, Scope by Scope.Impl(uiDispacher) {
+
+    private val view by weak(view)
+
     init {
         startPresenter()
     }

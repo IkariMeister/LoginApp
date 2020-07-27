@@ -17,8 +17,10 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.Dispatchers
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -26,11 +28,12 @@ class MainActivityTest : ActivityTest<MainActivity>(MainActivity::class.java) {
 
     @MockK
     lateinit var logoutMock: Logout
+    private lateinit var mainScopeMock : Module
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        val mainScopeMock = module {
+        mainScopeMock = module {
             scope(named<MainActivity>()) {
                 factory { (view: MainView) ->
                     MainPresenter(view, logoutMock, Dispatchers.Unconfined, Dispatchers.Unconfined)
@@ -39,6 +42,12 @@ class MainActivityTest : ActivityTest<MainActivity>(MainActivity::class.java) {
         }
         val app = InstrumentationRegistry.getInstrumentation().targetContext.asApp()
         app.resetDI(listOf(scopesModule), listOf(mainScopeMock))
+    }
+
+    @After
+    fun tearDown() {
+        val app = InstrumentationRegistry.getInstrumentation().targetContext.asApp()
+        app.resetDI(listOf(mainScopeMock), listOf(scopesModule))
     }
 
     @Test
