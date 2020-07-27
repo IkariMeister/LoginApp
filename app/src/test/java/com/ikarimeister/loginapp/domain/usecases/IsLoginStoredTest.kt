@@ -6,7 +6,7 @@ import arrow.core.right
 import com.ikarimeister.loginapp.data.TokenRepository
 import com.ikarimeister.loginapp.domain.model.StorageError
 import com.ikarimeister.loginapp.domain.model.Token
-import com.ikarimeister.loginapp.domain.model.TokenNotFound
+import com.ikarimeister.loginapp.domain.model.DataNotFound
 import com.ikarimeister.loginapp.utils.MotherObject.token
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -30,12 +30,12 @@ class IsLoginStoredTest {
 
     @Test
     fun `should return a TokenNotFound error when repository is empty`() = runBlockingTest {
-        every { repository.get() } returns TokenNotFound.left()
+        every { repository.get() } returns DataNotFound.left()
 
         val actual = sut()
 
         Assert.assertTrue(actual is Either.Left<StorageError>)
-        actual.mapLeft { Assert.assertEquals(TokenNotFound, it) }
+        actual.mapLeft { Assert.assertEquals(DataNotFound, it) }
     }
 
     @Test

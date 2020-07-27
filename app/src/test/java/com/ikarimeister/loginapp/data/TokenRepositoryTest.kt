@@ -6,7 +6,7 @@ import arrow.core.right
 import com.ikarimeister.loginapp.data.local.TokenDataSource
 import com.ikarimeister.loginapp.domain.model.StorageError
 import com.ikarimeister.loginapp.domain.model.Token
-import com.ikarimeister.loginapp.domain.model.TokenNotFound
+import com.ikarimeister.loginapp.domain.model.DataNotFound
 import com.ikarimeister.loginapp.utils.MotherObject.token
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -42,12 +42,12 @@ class TokenRepositoryTest {
     }
 
     @Test
-    fun `TokenNotFound is returned from datasource when datasource has no token`() {
-        every { dataSource.get() } returns TokenNotFound.left()
+    fun `DataNotFound is returned from datasource when datasource has no token`() {
+        every { dataSource.get() } returns DataNotFound.left()
 
         val actual = repository.get()
 
         assertTrue(actual is Either.Left<StorageError>)
-        actual.mapLeft { assertEquals(TokenNotFound, it) }
+        actual.mapLeft { assertEquals(DataNotFound, it) }
     }
 }

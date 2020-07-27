@@ -2,7 +2,7 @@ package com.ikarimeister.loginapp.ui.presenter
 
 import arrow.core.left
 import arrow.core.right
-import com.ikarimeister.loginapp.domain.model.TokenNotFound
+import com.ikarimeister.loginapp.domain.model.DataNotFound
 import com.ikarimeister.loginapp.domain.usecases.Logout
 import com.ikarimeister.loginapp.ui.view.MainView
 import io.mockk.MockKAnnotations
@@ -45,10 +45,10 @@ class MainPresenterTest {
     }
     @Test
     fun `View should show error when logout is Left`() {
-        coEvery { logout() } returns TokenNotFound.left()
+        coEvery { logout() } returns DataNotFound.left()
 
         presenter.doLogout()
 
-        verify { view.showError(TokenNotFound) }
+        verify { view.showError(DataNotFound) }
     }
 }
