@@ -25,6 +25,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.Dispatchers
+import leakcanary.FailTestOnLeak
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -39,7 +40,7 @@ class LoginActivityTest : ActivityTest<LoginActivity>(LoginActivity::class.java)
 
     @MockK
     lateinit var isLoginStored: IsLoginStored
-    private lateinit var loginScopeMock : Module
+    private lateinit var loginScopeMock: Module
 
     @Before
     fun setUp() {
@@ -62,6 +63,7 @@ class LoginActivityTest : ActivityTest<LoginActivity>(LoginActivity::class.java)
     }
 
     @Test
+    @FailTestOnLeak
     fun showLoginFormWhenTokenIsNotStored() {
         coEvery { isLoginStored() } returns TokenNotFound.left()
 
@@ -76,6 +78,7 @@ class LoginActivityTest : ActivityTest<LoginActivity>(LoginActivity::class.java)
     }
 
     @Test
+    @FailTestOnLeak
     fun showValidationErrorsWhenTokenIsNotStoredAndInputDataIsInvalid() {
         coEvery { isLoginStored() } returns TokenNotFound.left()
 
@@ -94,6 +97,7 @@ class LoginActivityTest : ActivityTest<LoginActivity>(LoginActivity::class.java)
     }
 
     @Test
+    @FailTestOnLeak
     fun showValidationErrorsOnPaswordWhenTokenIsNotStoredAndInputPaswordIsInvalid() {
         coEvery { isLoginStored() } returns TokenNotFound.left()
 
@@ -112,6 +116,7 @@ class LoginActivityTest : ActivityTest<LoginActivity>(LoginActivity::class.java)
     }
 
     @Test
+    @FailTestOnLeak
     fun showValidationErrorsOnEmailWhenTokenIsNotStoredAndInputEmailIsInvalid() {
         coEvery { isLoginStored() } returns TokenNotFound.left()
 
@@ -130,6 +135,7 @@ class LoginActivityTest : ActivityTest<LoginActivity>(LoginActivity::class.java)
     }
 
     @Test
+    @FailTestOnLeak
     fun showIncorrectCredentialsMessageWhenApiReturnANotValidLoginResponse() {
         coEvery { isLoginStored() } returns TokenNotFound.left()
         coEvery { loginMock(any()) } returns IncorrectCredentials.left()
@@ -149,6 +155,7 @@ class LoginActivityTest : ActivityTest<LoginActivity>(LoginActivity::class.java)
     }
 
     @Test
+    @FailTestOnLeak
     fun showSnackBarWhenThereIsNoConnection() {
         coEvery { isLoginStored() } returns TokenNotFound.left()
         coEvery { loginMock(any()) } returns NoConection.left()

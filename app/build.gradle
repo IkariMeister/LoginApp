@@ -15,6 +15,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "com.karumi.shot.ShotTestRunner"
+        testInstrumentationRunnerArgument "listener", "leakcanary.FailTestOnLeakRunListener"
     }
 
     compileOptions {
@@ -54,7 +55,7 @@ dependencies {
     implementation "com.google.code.gson:gson:$gson_version"
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-androidx-scope:$koin_version"
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     testImplementation "junit:junit:$junit_version"
     testImplementation "io.kotlintest:kotlintest:$kotlintest_version"
@@ -62,6 +63,7 @@ dependencies {
     testImplementation "com.squareup.okhttp3:mockwebserver:$mockwebserver_version"
     testImplementation "commons-io:commons-io:$commonsio_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    androidTestImplementation "com.squareup.leakcanary:leakcanary-android-instrumentation:$leakcanary_version"
     androidTestImplementation "io.mockk:mockk-android:$mockk_version"
     androidTestImplementation "com.github.tmurakami:dexopener:$dexopener_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"

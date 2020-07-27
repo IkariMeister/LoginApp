@@ -17,6 +17,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.Dispatchers
+import leakcanary.FailTestOnLeak
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -28,7 +29,7 @@ class MainActivityTest : ActivityTest<MainActivity>(MainActivity::class.java) {
 
     @MockK
     lateinit var logoutMock: Logout
-    private lateinit var mainScopeMock : Module
+    private lateinit var mainScopeMock: Module
 
     @Before
     fun setUp() {
@@ -51,6 +52,7 @@ class MainActivityTest : ActivityTest<MainActivity>(MainActivity::class.java) {
     }
 
     @Test
+    @FailTestOnLeak
     fun showErrorWhenLogoutReturnsError() {
         coEvery { logoutMock() } returns TokenNotFound.left()
 
@@ -61,6 +63,7 @@ class MainActivityTest : ActivityTest<MainActivity>(MainActivity::class.java) {
     }
 
     @Test
+    @FailTestOnLeak
     fun activityShowsWelcomeMessageAndLogoutButton() {
         coEvery { logoutMock() } returns TokenNotFound.left()
 
