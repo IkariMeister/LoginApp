@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/github/license/IkariMeister/LoginApp.svg?style=flat-square)](LICENSE)
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 [![Android CI](https://github.com/Ikarimeister/LoginApp/workflows/Android%20CI/badge.svg)](https://github.com/Ikarimeister/LoginApp/actions)
-[![Build Status](https://travis-ci.com/IkariMeister/LoginApp.svg?branch=master)](https://travis-ci.com/IkariMeister/LoginApp)
+[![Android Test](https://github.com/IkariMeister/LoginApp/workflows/Android%20Test/badge.svg)](https://github.com/Ikarimeister/LoginApp/actions)
 
 Simple login
 
@@ -81,7 +81,20 @@ For the threading problem, `kotlinx.Coroutines` are the solution chosen as **Int
 
 For the presentation layer, **MVP** pattern is the chosen implementation because is the most familiar implementation for the development team, we could consider moving to **MVVM** with data binding, but our expertise and confidence with MVP make us feel more comfortable.
 
-User validation has been implemented by using `ValidatedNel` applicative from `Arrow` library. The validation process will be accumulative and will show all errors found.
+Views are stored as WeakReferences to avoid retain its instance and provoke a memory leak. A `by weak`delegate has been added. Full credits to [this repo](https://github.com/Karumi/KataScreenshotKotlin)
+
+```kotlin
+fun <T> weak(value: T) = WeakRef(value)
+
+class WeakRef<out T>(value: T) {
+    private val weakReference: WeakReference<T> = WeakReference(value)
+    operator fun getValue(thisRef: Any, property: KProperty<*>): T? = weakReference.get()
+}
+
+private val view by weak(view)
+```
+                                                                                                                                                        
+User validation has been implemented by using `ValidatedNel` applicative from `Arrow` library. The validation process will be accumulative and will showall errors found.
 
 Rules that have been implemented are:
 * Email length less than 256 characters,
@@ -131,6 +144,8 @@ companion object {
     }
 ```
 Styles and theming has been defined following `Material Design` design system. For further information check [Material Design Page](https://material.io/)
+
+`leak canary has been added to the UI Tests, from now UI will fail if a memory leak is detected.
 
 
 ### Dependency supplying
