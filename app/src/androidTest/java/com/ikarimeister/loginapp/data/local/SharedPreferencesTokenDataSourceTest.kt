@@ -10,7 +10,7 @@ import arrow.core.Either
 import com.ikarimeister.loginapp.asApp
 import com.ikarimeister.loginapp.domain.model.StorageError
 import com.ikarimeister.loginapp.domain.model.Token
-import com.ikarimeister.loginapp.domain.model.TokenNotFound
+import com.ikarimeister.loginapp.domain.model.DataNotFound
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -84,7 +84,7 @@ class SharedPreferencesTokenDataSourceTest {
 
         Assert.assertFalse(preferences.contains(ActualDS.ID))
         Assert.assertTrue(actual is Either.Left<StorageError>)
-        actual.mapLeft { Assert.assertEquals(TokenNotFound, it) }
+        actual.mapLeft { Assert.assertEquals(DataNotFound, it) }
     }
 
     @Test
@@ -98,6 +98,6 @@ class SharedPreferencesTokenDataSourceTest {
         Assert.assertFalse(preferences.contains(ActualDS.ID))
         val actual = dataSource.get()
         Assert.assertTrue(actual is Either.Left<StorageError>)
-        actual.mapLeft { Assert.assertEquals(TokenNotFound, it) }
+        actual.mapLeft { Assert.assertEquals(DataNotFound, it) }
     }
 }

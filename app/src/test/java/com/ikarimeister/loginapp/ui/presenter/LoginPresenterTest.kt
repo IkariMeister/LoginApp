@@ -91,7 +91,7 @@ class LoginPresenterTest {
     @Test
     fun `View should show and hide loading and show logging form when starts and a Token is not stored`() {
         givenAView()
-        every { runBlocking { islogged() } } returns TokenNotFound.left()
+        every { runBlocking { islogged() } } returns DataNotFound.left()
 
         presenter.onStart()
 

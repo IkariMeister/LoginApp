@@ -4,7 +4,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import arrow.core.left
 import com.ikarimeister.loginapp.R
 import com.ikarimeister.loginapp.asApp
-import com.ikarimeister.loginapp.domain.model.TokenNotFound
+import com.ikarimeister.loginapp.domain.model.DataNotFound
 import com.ikarimeister.loginapp.domain.usecases.Logout
 import com.ikarimeister.loginapp.scopesModule
 import com.ikarimeister.loginapp.ui.ActivityTest
@@ -54,7 +54,7 @@ class MainActivityTest : ActivityTest<MainActivity>(MainActivity::class.java) {
     @Test
     @FailTestOnLeak
     fun showErrorWhenLogoutReturnsError() {
-        coEvery { logoutMock() } returns TokenNotFound.left()
+        coEvery { logoutMock() } returns DataNotFound.left()
 
         val context = startActivity()
         BaristaClickInteractions.clickOn(R.id.logout)
@@ -65,7 +65,7 @@ class MainActivityTest : ActivityTest<MainActivity>(MainActivity::class.java) {
     @Test
     @FailTestOnLeak
     fun activityShowsWelcomeMessageAndLogoutButton() {
-        coEvery { logoutMock() } returns TokenNotFound.left()
+        coEvery { logoutMock() } returns DataNotFound.left()
 
         val context = startActivity()
 

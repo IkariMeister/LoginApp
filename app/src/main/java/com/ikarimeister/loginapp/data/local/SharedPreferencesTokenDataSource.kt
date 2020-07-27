@@ -5,20 +5,20 @@ import androidx.core.content.edit
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import com.ikarimeister.loginapp.domain.model.DataNotFound
 import com.ikarimeister.loginapp.domain.model.StorageError
 import com.ikarimeister.loginapp.domain.model.Token
-import com.ikarimeister.loginapp.domain.model.TokenNotFound
 
 class SharedPreferencesTokenDataSource(
-    private val preferences: SharedPreferences
+        private val preferences: SharedPreferences
 ) : TokenDataSource {
     override fun get(): Either<StorageError, Token> =
             if (preferences.contains(ID)) {
                 preferences.getString(ID, null)
                         ?.right()?.map { Token(it) }
-                        ?: TokenNotFound.left()
+                        ?: DataNotFound.left()
             } else {
-                TokenNotFound.left()
+                DataNotFound.left()
             }
 
     override fun plus(element: Token): Either<StorageError, Unit> =
