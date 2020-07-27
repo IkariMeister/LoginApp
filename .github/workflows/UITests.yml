@@ -29,6 +29,7 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         name: unit-test-reports
+        if:  ${{ always() }}
         with:
           name: unit-test-reports
           path: |
