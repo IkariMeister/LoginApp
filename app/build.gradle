@@ -142,7 +142,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'conn
             "output/code-coverage/connected/*.ec"
     ])
     reports {
-        xml.enabled = true
+        xml.enabled = false
         html.enabled = true
     }
 }

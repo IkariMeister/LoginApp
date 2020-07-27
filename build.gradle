@@ -48,8 +48,6 @@ subprojects {
         args "src/**/*.kt"
     }
 
-//check.dependsOn ktlint
-
     task ktlintFormat(type: JavaExec, group: "formatting") {
         description = "Fix Kotlin code style deviations."
         classpath = configurations.ktlint
@@ -60,7 +58,6 @@ subprojects {
     detekt {
         toolVersion = "$detekt_version"
         parallel = false
-//        config = files("$projectDir/../config/detekt/config.yml")
         buildUponDefaultConfig = false
         // Interpret config files as updates to the default config. `false` by default.
         baseline = file("$projectDir/../config/detekt/baseline.xml")
@@ -73,7 +70,7 @@ subprojects {
         // If set to `true` the build does not fail when the maxIssues count was reached. Defaults to `false`.
         reports {
             xml {
-                enabled = true                                // Enable/Disable XML report (default: true)
+                enabled = false                                // Enable/Disable XML report (default: true)
                 destination = file("build/reports/detekt.xml")
                 // Path where XML report will be stored (default: `build/reports/detekt/detekt.xml`)
             }
@@ -83,13 +80,9 @@ subprojects {
                 // Path where HTML report will be stored (default: `build/reports/detekt/detekt.html`)
             }
             txt {
-                enabled = true                                // Enable/Disable TXT report (default: true)
+                enabled = false                                // Enable/Disable TXT report (default: true)
                 destination = file("build/reports/detekt.txt")
                 // Path where TXT report will be stored (default: `build/reports/detekt/detekt.txt`)
-            }
-            custom {
-                reportId = "CustomJsonReport"                   // The simple class name of your custom report.
-                destination = file("build/reports/detekt.json") // Path where report will be stored
             }
         }
     }
