@@ -3,10 +3,11 @@ package com.ikarimeister.loginapp.data
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import com.ikarimeister.loginapp.data.local.TokenDataSource
+import com.ikarimeister.loginapp.data.local.ConfigurationDataSource
+import com.ikarimeister.loginapp.data.repositories.TokenRepository
+import com.ikarimeister.loginapp.domain.model.DataNotFound
 import com.ikarimeister.loginapp.domain.model.StorageError
 import com.ikarimeister.loginapp.domain.model.Token
-import com.ikarimeister.loginapp.domain.model.DataNotFound
 import com.ikarimeister.loginapp.utils.MotherObject.token
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -22,7 +23,7 @@ class TokenRepositoryTest {
     private lateinit var repository: TokenRepository
 
     @MockK
-    lateinit var dataSource: TokenDataSource
+    lateinit var dataSource: ConfigurationDataSource<Token>
 
     @Before
     fun setUp() {

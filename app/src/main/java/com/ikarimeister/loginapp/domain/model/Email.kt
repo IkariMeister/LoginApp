@@ -7,7 +7,6 @@ import arrow.core.extensions.validated.applicative.applicative
 import arrow.core.fix
 import com.ikarimeister.loginapp.domain.usecases.validate
 
-
 inline class Email(val value: String) {
     companion object {
         const val EMAIL_REGEX = ("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]|[\\w-]{2,}))@" +

@@ -3,9 +3,9 @@ package com.ikarimeister.loginapp.domain.usecases
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import com.ikarimeister.loginapp.data.TokenRepository
-import com.ikarimeister.loginapp.domain.model.StorageError
+import com.ikarimeister.loginapp.data.repositories.TokenRepository
 import com.ikarimeister.loginapp.domain.model.DataNotFound
+import com.ikarimeister.loginapp.domain.model.StorageError
 import com.ikarimeister.loginapp.domain.model.UnknownStorageError
 import com.ikarimeister.loginapp.utils.MotherObject.token
 import io.mockk.MockKAnnotations

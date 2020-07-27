@@ -2,11 +2,13 @@ package com.ikarimeister.loginapp
 
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
+import com.ikarimeister.loginapp.data.ConfigurationRepository
 import com.ikarimeister.loginapp.data.LoginApiClient
-import com.ikarimeister.loginapp.data.TokenRepository
-import com.ikarimeister.loginapp.data.local.SharedPreferencesTokenDataSource
-import com.ikarimeister.loginapp.data.local.TokenDataSource
+import com.ikarimeister.loginapp.data.local.ConfigurationDataSource
+import com.ikarimeister.loginapp.data.local.sharedpreferences.SharedPreferencesTokenDataSource
 import com.ikarimeister.loginapp.data.network.FakeLoginApiClient
+import com.ikarimeister.loginapp.data.repositories.TokenRepository
+import com.ikarimeister.loginapp.domain.model.Token
 import com.ikarimeister.loginapp.domain.usecases.IsLoginStored
 import com.ikarimeister.loginapp.domain.usecases.Login
 import com.ikarimeister.loginapp.domain.usecases.Logout
@@ -39,11 +41,12 @@ val appModule = module {
 }
 
 val dataModule = module {
-    factory<TokenDataSource> {
-        SharedPreferencesTokenDataSource(androidApplication()
-                .getSharedPreferences(SharedPreferencesTokenDataSource.ID, MODE_PRIVATE))
+    single { androidApplication()
+            .getSharedPreferences(LoginApp.sharedName, MODE_PRIVATE) }
+    single<ConfigurationDataSource<Token>> {
+        SharedPreferencesTokenDataSource(get())
     }
-    factory { TokenRepository(get()) }
+    single<ConfigurationRepository<Token>> { TokenRepository(get()) }
     factory<LoginApiClient> { FakeLoginApiClient }
 }
 

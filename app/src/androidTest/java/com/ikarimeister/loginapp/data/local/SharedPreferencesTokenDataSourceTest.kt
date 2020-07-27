@@ -1,6 +1,5 @@
 package com.ikarimeister.loginapp.data.local
 
-import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -8,21 +7,23 @@ import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import arrow.core.Either
 import com.ikarimeister.loginapp.asApp
+import com.ikarimeister.loginapp.data.local.sharedpreferences.SharedPreferencesTokenDataSource
+import com.ikarimeister.loginapp.domain.model.DataNotFound
 import com.ikarimeister.loginapp.domain.model.StorageError
 import com.ikarimeister.loginapp.domain.model.Token
-import com.ikarimeister.loginapp.domain.model.DataNotFound
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.android.ext.android.getKoin
 
 typealias ActualDS = SharedPreferencesTokenDataSource
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class SharedPreferencesTokenDataSourceTest {
-    private lateinit var dataSource: TokenDataSource
+    private lateinit var dataSource: ConfigurationDataSource<Token>
     private lateinit var preferences: SharedPreferences
 
     companion object {
@@ -32,8 +33,9 @@ class SharedPreferencesTokenDataSourceTest {
     @Before
     fun setUp() {
         val app = InstrumentationRegistry.getInstrumentation().targetContext.asApp()
-        preferences = app.getSharedPreferences(ActualDS.ID, MODE_PRIVATE)
-        dataSource = ActualDS(preferences)
+
+        preferences = app.getKoin().get()
+        dataSource = app.getKoin().get()
     }
 
     @After

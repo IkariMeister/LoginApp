@@ -7,9 +7,9 @@ import androidx.test.platform.app.InstrumentationRegistry
 import arrow.core.left
 import com.ikarimeister.loginapp.R
 import com.ikarimeister.loginapp.asApp
+import com.ikarimeister.loginapp.domain.model.DataNotFound
 import com.ikarimeister.loginapp.domain.model.IncorrectCredentials
 import com.ikarimeister.loginapp.domain.model.NoConection
-import com.ikarimeister.loginapp.domain.model.DataNotFound
 import com.ikarimeister.loginapp.domain.usecases.IsLoginStored
 import com.ikarimeister.loginapp.domain.usecases.Login
 import com.ikarimeister.loginapp.scopesModule

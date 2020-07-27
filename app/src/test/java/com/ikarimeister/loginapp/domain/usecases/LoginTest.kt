@@ -4,7 +4,7 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.ikarimeister.loginapp.data.LoginApiClient
-import com.ikarimeister.loginapp.data.TokenRepository
+import com.ikarimeister.loginapp.data.repositories.TokenRepository
 import com.ikarimeister.loginapp.domain.model.*
 import com.ikarimeister.loginapp.utils.MotherObject
 import io.mockk.Called
