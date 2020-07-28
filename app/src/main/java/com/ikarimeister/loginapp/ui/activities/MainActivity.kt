@@ -1,5 +1,6 @@
 package com.ikarimeister.loginapp.ui.activities
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.ikarimeister.loginapp.R
 import com.ikarimeister.loginapp.databinding.ActivityMainBinding
+import com.ikarimeister.loginapp.domain.model.Profile
 import com.ikarimeister.loginapp.domain.model.StorageError
 import com.ikarimeister.loginapp.ui.presenter.MainPresenter
 import com.ikarimeister.loginapp.ui.view.MainView
@@ -28,6 +30,12 @@ class MainActivity : AppCompatActivity(), MainView {
         setContentView(binding.root)
         lifecycle.addObserver(presenter)
         binding.logout.setOnClickListener { presenter.doLogout() }
+        presenter.recoverProfile()
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun showProfile(profile: Profile) {
+        binding.message.text = getString(R.string.welcome) + profile.username.username()
     }
 
     override fun showError(error: StorageError) {

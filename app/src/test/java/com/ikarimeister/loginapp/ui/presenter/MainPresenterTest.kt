@@ -3,6 +3,7 @@ package com.ikarimeister.loginapp.ui.presenter
 import arrow.core.left
 import arrow.core.right
 import com.ikarimeister.loginapp.domain.model.DataNotFound
+import com.ikarimeister.loginapp.domain.usecases.GetProfile
 import com.ikarimeister.loginapp.domain.usecases.Logout
 import com.ikarimeister.loginapp.ui.view.MainView
 import io.mockk.MockKAnnotations
@@ -18,6 +19,8 @@ class MainPresenterTest {
 
     @MockK
     lateinit var logout: Logout
+    @MockK
+    lateinit var getProfile: GetProfile
 
     @MockK
     lateinit var view: MainView
@@ -26,7 +29,7 @@ class MainPresenterTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        presenter = MainPresenter(view, logout, Dispatchers.Unconfined, Dispatchers.Unconfined)
+        presenter = MainPresenter(view, getProfile, logout, Dispatchers.Unconfined, Dispatchers.Unconfined)
         presenter.startPresenter()
     }
 

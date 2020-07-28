@@ -9,7 +9,7 @@ import com.ikarimeister.loginapp.domain.model.Email
 import com.ikarimeister.loginapp.domain.model.Password
 import com.ikarimeister.loginapp.domain.model.User
 import com.ikarimeister.loginapp.domain.model.ValidationErrors
-import com.ikarimeister.loginapp.domain.usecases.IsLoginStored
+import com.ikarimeister.loginapp.domain.usecases.GetProfile
 import com.ikarimeister.loginapp.domain.usecases.Login
 import com.ikarimeister.loginapp.ui.coomons.Scope
 import com.ikarimeister.loginapp.ui.view.LoginView
@@ -20,7 +20,7 @@ import kotlinx.coroutines.withContext
 class LoginPresenter(
     view: LoginView,
     private val login: Login,
-    private val isLoginStored: IsLoginStored,
+    private val getProfile: GetProfile,
     private val bgDispatcher: CoroutineDispatcher,
     uiDispacher: CoroutineDispatcher
 ) : LifecycleObserver, Scope by Scope.Impl(uiDispacher) {
@@ -54,7 +54,7 @@ class LoginPresenter(
 
     fun onStart() = launch {
         view?.showLoading()
-        val isLogged = withContext(bgDispatcher) { isLoginStored() }
+        val isLogged = withContext(bgDispatcher) { getProfile() }
         view?.hideLoading()
         isLogged.fold(
                 { view?.showLoginForm() },

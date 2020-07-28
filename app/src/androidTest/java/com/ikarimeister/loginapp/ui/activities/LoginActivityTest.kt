@@ -10,7 +10,7 @@ import com.ikarimeister.loginapp.asApp
 import com.ikarimeister.loginapp.domain.model.DataNotFound
 import com.ikarimeister.loginapp.domain.model.IncorrectCredentials
 import com.ikarimeister.loginapp.domain.model.NoConection
-import com.ikarimeister.loginapp.domain.usecases.IsLoginStored
+import com.ikarimeister.loginapp.domain.usecases.GetProfile
 import com.ikarimeister.loginapp.domain.usecases.Login
 import com.ikarimeister.loginapp.scopesModule
 import com.ikarimeister.loginapp.ui.ActivityTest
@@ -39,7 +39,7 @@ class LoginActivityTest : ActivityTest<LoginActivity>(LoginActivity::class.java)
     lateinit var loginMock: Login
 
     @MockK
-    lateinit var isLoginStored: IsLoginStored
+    lateinit var getProfile: GetProfile
     private lateinit var loginScopeMock: Module
 
     @Before
@@ -48,7 +48,7 @@ class LoginActivityTest : ActivityTest<LoginActivity>(LoginActivity::class.java)
         loginScopeMock = module {
             scope(named<LoginActivity>()) {
                 factory { (view: LoginView) ->
-                    LoginPresenter(view, loginMock, isLoginStored, Dispatchers.Unconfined, Dispatchers.Unconfined)
+                    LoginPresenter(view, loginMock, getProfile, Dispatchers.Unconfined, Dispatchers.Unconfined)
                 }
             }
         }
@@ -65,7 +65,7 @@ class LoginActivityTest : ActivityTest<LoginActivity>(LoginActivity::class.java)
     @Test
     @FailTestOnLeak
     fun showLoginFormWhenTokenIsNotStored() {
-        coEvery { isLoginStored() } returns DataNotFound.left()
+        coEvery { getProfile() } returns DataNotFound.left()
 
         startActivity()
 
@@ -80,7 +80,7 @@ class LoginActivityTest : ActivityTest<LoginActivity>(LoginActivity::class.java)
     @Test
     @FailTestOnLeak
     fun showValidationErrorsWhenTokenIsNotStoredAndInputDataIsInvalid() {
-        coEvery { isLoginStored() } returns DataNotFound.left()
+        coEvery { getProfile() } returns DataNotFound.left()
 
         startActivity()
         BaristaEditTextInteractions.writeTo(R.id.username, invalidEmail)
@@ -99,7 +99,7 @@ class LoginActivityTest : ActivityTest<LoginActivity>(LoginActivity::class.java)
     @Test
     @FailTestOnLeak
     fun showValidationErrorsOnPaswordWhenTokenIsNotStoredAndInputPaswordIsInvalid() {
-        coEvery { isLoginStored() } returns DataNotFound.left()
+        coEvery { getProfile() } returns DataNotFound.left()
 
         startActivity()
         BaristaEditTextInteractions.writeTo(R.id.username, validEmail)
@@ -118,7 +118,7 @@ class LoginActivityTest : ActivityTest<LoginActivity>(LoginActivity::class.java)
     @Test
     @FailTestOnLeak
     fun showValidationErrorsOnEmailWhenTokenIsNotStoredAndInputEmailIsInvalid() {
-        coEvery { isLoginStored() } returns DataNotFound.left()
+        coEvery { getProfile() } returns DataNotFound.left()
 
         startActivity()
         BaristaEditTextInteractions.writeTo(R.id.username, invalidEmail)
@@ -137,7 +137,7 @@ class LoginActivityTest : ActivityTest<LoginActivity>(LoginActivity::class.java)
     @Test
     @FailTestOnLeak
     fun showIncorrectCredentialsMessageWhenApiReturnANotValidLoginResponse() {
-        coEvery { isLoginStored() } returns DataNotFound.left()
+        coEvery { getProfile() } returns DataNotFound.left()
         coEvery { loginMock(any()) } returns IncorrectCredentials.left()
 
         val context = startActivity()
@@ -157,7 +157,7 @@ class LoginActivityTest : ActivityTest<LoginActivity>(LoginActivity::class.java)
     @Test
     @FailTestOnLeak
     fun showSnackBarWhenThereIsNoConnection() {
-        coEvery { isLoginStored() } returns DataNotFound.left()
+        coEvery { getProfile() } returns DataNotFound.left()
         coEvery { loginMock(any()) } returns NoConection.left()
 
         val context = startActivity()

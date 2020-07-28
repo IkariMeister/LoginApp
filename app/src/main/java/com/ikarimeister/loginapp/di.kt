@@ -15,7 +15,7 @@ import com.ikarimeister.loginapp.data.repositories.ProfileRepository
 import com.ikarimeister.loginapp.data.repositories.TokenRepository
 import com.ikarimeister.loginapp.domain.model.Profile
 import com.ikarimeister.loginapp.domain.model.Token
-import com.ikarimeister.loginapp.domain.usecases.IsLoginStored
+import com.ikarimeister.loginapp.domain.usecases.GetProfile
 import com.ikarimeister.loginapp.domain.usecases.Login
 import com.ikarimeister.loginapp.domain.usecases.Logout
 import com.ikarimeister.loginapp.ui.activities.LoginActivity
@@ -72,23 +72,25 @@ val scopesModule = module {
             LoginPresenter(
                     view = view,
                     login = get(),
-                    isLoginStored = get(),
+                    getProfile = get(),
                     bgDispatcher = get(named("BG")),
                     uiDispacher = get(named("UI"))
             )
         }
-        scoped { Login(repository = get(named("Token")), apiClient = get()) }
-        scoped { IsLoginStored(repository = get(named("Token"))) }
+        scoped { Login(repository = get(named("Profile")), apiClient = get()) }
+        scoped { GetProfile(repository = get(named("Profile"))) }
     }
     scope(named<MainActivity>()) {
         factory { (view: MainView) ->
             MainPresenter(
                     view = view,
+                    getProfile = get(),
                     logout = get(),
                     bgDispatcher = get(named("BG")),
                     uiDispacher = get(named("UI"))
             )
         }
-        scoped { Logout(repository = get(named("Token"))) }
+        scoped { Logout(repository = get(named("Profile"))) }
+        scoped { GetProfile(repository = get(named("Profile"))) }
     }
 }

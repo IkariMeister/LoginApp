@@ -18,7 +18,6 @@ import org.junit.runner.RunWith
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 
-
 private typealias DS = SharedPreferencesProfileDataSource
 
 @LargeTest

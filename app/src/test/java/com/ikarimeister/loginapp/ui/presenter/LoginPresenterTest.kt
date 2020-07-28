@@ -2,22 +2,21 @@ package com.ikarimeister.loginapp.ui.presenter
 
 import arrow.core.left
 import arrow.core.right
-import com.ikarimeister.loginapp.domain.model.*
-import com.ikarimeister.loginapp.domain.usecases.IsLoginStored
+import com.ikarimeister.loginapp.domain.model.DataNotFound
+import com.ikarimeister.loginapp.domain.model.IncorrectCredentials
+import com.ikarimeister.loginapp.domain.model.LoginError
+import com.ikarimeister.loginapp.domain.model.ValidationErrors
+import com.ikarimeister.loginapp.domain.usecases.GetProfile
 import com.ikarimeister.loginapp.domain.usecases.Login
 import com.ikarimeister.loginapp.ui.view.LoginView
 import com.ikarimeister.loginapp.utils.MotherObject.email
 import com.ikarimeister.loginapp.utils.MotherObject.emptyEmail
 import com.ikarimeister.loginapp.utils.MotherObject.emptyPassword
 import com.ikarimeister.loginapp.utils.MotherObject.password
-import com.ikarimeister.loginapp.utils.MotherObject.token
-import io.mockk.MockKAnnotations
-import io.mockk.every
+import com.ikarimeister.loginapp.utils.MotherObject.profile
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import io.mockk.verify
-import io.mockk.verifyOrder
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -28,7 +27,7 @@ class LoginPresenterTest {
     lateinit var login: Login
 
     @MockK
-    lateinit var islogged: IsLoginStored
+    lateinit var islogged: GetProfile
 
     @MockK
     lateinit var view: LoginView
@@ -49,7 +48,7 @@ class LoginPresenterTest {
     @Test
     fun `View should show and hide loading and show an error when Login return error`() {
         givenAView()
-        every { runBlocking { login(any()) } } returns IncorrectCredentials.left()
+        coEvery { login(any()) } returns IncorrectCredentials.left()
 
         presenter.doLogin(email, password)
 
@@ -63,7 +62,7 @@ class LoginPresenterTest {
     @Test
     fun `View should show and hide loading and navigate to logged screen when Login return OK`() {
         givenAView()
-        every { runBlocking { login(any()) } } returns token.right()
+        coEvery { login(any()) } returns profile.right()
 
         presenter.doLogin(email, password)
 
@@ -77,7 +76,7 @@ class LoginPresenterTest {
     @Test
     fun `View should show and hide loading and navigate to logged screen when starts and a Token is stored`() {
         givenAView()
-        every { runBlocking { islogged() } } returns token.right()
+        coEvery { islogged() } returns profile.right()
 
         presenter.onStart()
 
@@ -91,7 +90,7 @@ class LoginPresenterTest {
     @Test
     fun `View should show and hide loading and show logging form when starts and a Token is not stored`() {
         givenAView()
-        every { runBlocking { islogged() } } returns DataNotFound.left()
+        coEvery { islogged() } returns DataNotFound.left()
 
         presenter.onStart()
 
