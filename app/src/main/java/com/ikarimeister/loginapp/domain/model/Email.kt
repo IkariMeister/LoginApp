@@ -16,6 +16,8 @@ inline class Email(val value: String) {
                 "[0-9]{1,2}|25[0-5]|2[0-4][0-9]))|" +
                 "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$")
         const val maxLength = 256
+        const val at = "@"
+        const val empty = ""
     }
 
     fun validate() =
@@ -24,4 +26,6 @@ inline class Email(val value: String) {
                     this.validate(TooLongEmail) { this.value.length < maxLength },
                     this.validate(NotValidCharsInEmail) { this.value.matches(EMAIL_REGEX.toRegex()) }
             ) { it.a }.fix()
+
+    fun username() = value.replaceAfter(at, empty).replace(at, empty)
 }

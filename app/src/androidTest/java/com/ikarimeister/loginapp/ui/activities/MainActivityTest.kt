@@ -2,9 +2,14 @@ package com.ikarimeister.loginapp.ui.activities
 
 import androidx.test.platform.app.InstrumentationRegistry
 import arrow.core.left
+import arrow.core.right
 import com.ikarimeister.loginapp.R
 import com.ikarimeister.loginapp.asApp
 import com.ikarimeister.loginapp.domain.model.DataNotFound
+import com.ikarimeister.loginapp.domain.model.Email
+import com.ikarimeister.loginapp.domain.model.Profile
+import com.ikarimeister.loginapp.domain.model.Token
+import com.ikarimeister.loginapp.domain.usecases.GetProfile
 import com.ikarimeister.loginapp.domain.usecases.Logout
 import com.ikarimeister.loginapp.scopesModule
 import com.ikarimeister.loginapp.ui.ActivityTest
@@ -29,6 +34,8 @@ class MainActivityTest : ActivityTest<MainActivity>(MainActivity::class.java) {
 
     @MockK
     lateinit var logoutMock: Logout
+    @MockK
+    lateinit var getProfileMock: GetProfile
     private lateinit var mainScopeMock: Module
 
     @Before
@@ -37,7 +44,7 @@ class MainActivityTest : ActivityTest<MainActivity>(MainActivity::class.java) {
         mainScopeMock = module {
             scope(named<MainActivity>()) {
                 factory { (view: MainView) ->
-                    MainPresenter(view, logoutMock, Dispatchers.Unconfined, Dispatchers.Unconfined)
+                    MainPresenter(view, getProfileMock, logoutMock, Dispatchers.Unconfined, Dispatchers.Unconfined)
                 }
             }
         }
@@ -55,6 +62,7 @@ class MainActivityTest : ActivityTest<MainActivity>(MainActivity::class.java) {
     @FailTestOnLeak
     fun showErrorWhenLogoutReturnsError() {
         coEvery { logoutMock() } returns DataNotFound.left()
+        coEvery { getProfileMock() } returns profile.right()
 
         val context = startActivity()
         BaristaClickInteractions.clickOn(R.id.logout)
@@ -65,7 +73,20 @@ class MainActivityTest : ActivityTest<MainActivity>(MainActivity::class.java) {
     @Test
     @FailTestOnLeak
     fun activityShowsWelcomeMessageAndLogoutButton() {
-        coEvery { logoutMock() } returns DataNotFound.left()
+        coEvery { getProfileMock() } returns profile.right()
+
+        val context = startActivity()
+
+        BaristaVisibilityAssertions.assertDisplayed(R.id.logout)
+        BaristaVisibilityAssertions.assertDisplayed(context.getString(R.string.action_sign_out))
+        BaristaVisibilityAssertions.assertDisplayed(R.id.message)
+        BaristaVisibilityAssertions.assertDisplayed(context.getString(R.string.welcome) + username)
+    }
+
+    @Test
+    @FailTestOnLeak
+    fun activityShowsErrorIfProfileNotFound() {
+        coEvery { getProfileMock() } returns DataNotFound.left()
 
         val context = startActivity()
 
@@ -73,5 +94,13 @@ class MainActivityTest : ActivityTest<MainActivity>(MainActivity::class.java) {
         BaristaVisibilityAssertions.assertDisplayed(context.getString(R.string.action_sign_out))
         BaristaVisibilityAssertions.assertDisplayed(R.id.message)
         BaristaVisibilityAssertions.assertDisplayed(context.getString(R.string.welcome))
+        BaristaVisibilityAssertions.assertDisplayed(context.getString(R.string.unknown_error))
+    }
+
+    companion object {
+        const val username = "john.doe"
+        const val validEmail = "john.doe@company.com"
+        const val token = "dsfdsfsdfdsgs"
+        val profile = Profile(Email(validEmail), Token(token))
     }
 }

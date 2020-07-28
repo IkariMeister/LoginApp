@@ -1,8 +1,8 @@
 package com.ikarimeister.loginapp.domain.usecases
 
 import com.ikarimeister.loginapp.data.ConfigurationRepository
-import com.ikarimeister.loginapp.domain.model.Token
+import com.ikarimeister.loginapp.domain.model.Profile
 
-class IsLoginStored(private val repository: ConfigurationRepository<Token>) {
+class GetProfile(private val repository: ConfigurationRepository<Profile>) {
     suspend operator fun invoke() = repository.get()
 }

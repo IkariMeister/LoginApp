@@ -3,13 +3,16 @@ package com.ikarimeister.loginapp.domain.usecases
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import com.ikarimeister.loginapp.data.ConfigurationRepository
 import com.ikarimeister.loginapp.data.LoginApiClient
-import com.ikarimeister.loginapp.data.repositories.TokenRepository
-import com.ikarimeister.loginapp.domain.model.*
+import com.ikarimeister.loginapp.domain.model.LoginError
+import com.ikarimeister.loginapp.domain.model.NoConection
+import com.ikarimeister.loginapp.domain.model.Profile
 import com.ikarimeister.loginapp.utils.MotherObject
 import io.mockk.Called
+import io.mockk.MockKAnnotations
 import io.mockk.every
-import io.mockk.mockkClass
+import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -22,14 +25,16 @@ import org.junit.runners.JUnit4
 @RunWith(JUnit4::class)
 class LoginTest {
 
-    private lateinit var stubApiClient: LoginApiClient
-    private lateinit var mockRepository: TokenRepository
+    @MockK
+    lateinit var stubApiClient: LoginApiClient
+
+    @MockK
+    lateinit var mockRepository: ConfigurationRepository<Profile>
     private lateinit var sut: Login
 
     @Before
     fun setup() {
-        stubApiClient = mockkClass(LoginApiClient::class)
-        mockRepository = mockkClass(TokenRepository::class)
+        MockKAnnotations.init(this)
         sut = Login(stubApiClient, mockRepository)
     }
 
@@ -45,11 +50,11 @@ class LoginTest {
     @Test
     fun `Should return a Token when LoginApiClient returns a Token`() = runBlocking {
         every { stubApiClient.login(any()) } returns MotherObject.token.right()
-        every { mockRepository.plus(MotherObject.token) } returns Unit.right()
+        every { mockRepository + MotherObject.profile } returns Unit.right()
 
         val actual = sut.invoke(MotherObject.user)
 
-        assertEquals(MotherObject.token.right(), actual)
+        assertEquals(MotherObject.profile.right(), actual)
     }
 
     @Test
@@ -64,10 +69,10 @@ class LoginTest {
     @Test
     fun `Should save on repository a Token when LoginApiClient returns a Token`() = runBlocking {
         every { stubApiClient.login(any()) } returns MotherObject.token.right()
-        every { mockRepository.plus(MotherObject.token) } returns Unit.right()
+        every { mockRepository + MotherObject.profile } returns Unit.right()
 
         sut.invoke(MotherObject.user)
 
-        verify { mockRepository + MotherObject.token }
+        verify { mockRepository + MotherObject.profile }
     }
 }

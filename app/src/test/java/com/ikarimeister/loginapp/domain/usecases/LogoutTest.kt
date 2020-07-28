@@ -3,11 +3,12 @@ package com.ikarimeister.loginapp.domain.usecases
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import com.ikarimeister.loginapp.data.repositories.TokenRepository
+import com.ikarimeister.loginapp.data.ConfigurationRepository
 import com.ikarimeister.loginapp.domain.model.DataNotFound
+import com.ikarimeister.loginapp.domain.model.Profile
 import com.ikarimeister.loginapp.domain.model.StorageError
 import com.ikarimeister.loginapp.domain.model.UnknownStorageError
-import com.ikarimeister.loginapp.utils.MotherObject.token
+import com.ikarimeister.loginapp.utils.MotherObject
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -19,7 +20,7 @@ import org.junit.Test
 class LogoutTest {
 
     @MockK
-    lateinit var repository: TokenRepository
+    lateinit var repository: ConfigurationRepository<Profile>
 
     lateinit var logout: Logout
 
@@ -31,8 +32,8 @@ class LogoutTest {
 
     @Test
     fun `should remove the token from repository if present and return Right Unit`() = runBlockingTest {
-        every { repository.get() } returns token.right()
-        every { repository - token } returns Unit.right()
+        every { repository.get() } returns MotherObject.profile.right()
+        every { repository - MotherObject.profile } returns Unit.right()
 
         val actual = logout()
 
@@ -51,9 +52,9 @@ class LogoutTest {
 
     @Test
     fun `should return UnknownStorageError if there is any problem removing the token`() = runBlockingTest {
-        every { repository.get() } returns token.right()
+        every { repository.get() } returns MotherObject.profile.right()
         val throwable = Exception()
-        every { repository - token } returns UnknownStorageError(throwable).left()
+        every { repository - MotherObject.profile } returns UnknownStorageError(throwable).left()
 
         val actual = logout()
 
