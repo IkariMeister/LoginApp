@@ -50,6 +50,22 @@ Response:
 The local storage for the login information is implemented using a **Repository** pattern. With the requirements we already have, the data source we will use will be Android Shared Preferences since is a simple solution, but in the future could be replaced by a database implementation, to make this change easier we will use Repository pattern, to abstract the business logic from the real data source and allow to replace data source implementation fast and smooth.
 Since the data source is implemented with `Shared Preferences` over Android SDK, instrumentation tests will be required to test its correct working. 
 
+To make it easier the repository replacement interfaces have been added, they weren't added before because there was one implementation and we felt they were a premature optimization, but to refactor from Token to Profile have been very helpful not to break test cycle during the refactoring.
+```kotlin
+interface ConfigurationRepository<T> {
+    fun get(): Either<StorageError, T>
+    operator fun plus(element: T): Either<StorageError, Unit>
+    operator fun minus(element: T): Either<StorageError, Unit>
+}
+```
+```kotlin
+interface ConfigurationDataSource<T> {
+    fun get(): Either<StorageError, T>
+    operator fun plus(element: T): Either<StorageError, Unit>
+    operator fun minus(element: T): Either<StorageError, Unit>
+}
+```
+
 ### Domain Layer
 [(Top)](#loginapp)
 
