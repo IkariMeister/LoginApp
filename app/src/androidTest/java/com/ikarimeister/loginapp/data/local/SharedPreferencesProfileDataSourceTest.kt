@@ -6,11 +6,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import arrow.core.Either
+import com.google.gson.Gson
 import com.ikarimeister.loginapp.asApp
-import com.ikarimeister.loginapp.data.local.sharedpreferences.SharedPreferencesTokenDataSource
-import com.ikarimeister.loginapp.domain.model.DataNotFound
-import com.ikarimeister.loginapp.domain.model.StorageError
-import com.ikarimeister.loginapp.domain.model.Token
+import com.ikarimeister.loginapp.data.local.sharedpreferences.SharedPreferencesProfileDataSource
+import com.ikarimeister.loginapp.domain.model.*
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -19,16 +18,20 @@ import org.junit.runner.RunWith
 import org.koin.android.ext.android.getKoin
 import org.koin.core.qualifier.named
 
-private typealias ActualDS = SharedPreferencesTokenDataSource
+
+private typealias DS = SharedPreferencesProfileDataSource
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-class SharedPreferencesTokenDataSourceTest {
-    private lateinit var dataSource: ConfigurationDataSource<Token>
+class SharedPreferencesProfileDataSourceTest {
+    private lateinit var dataSource: ConfigurationDataSource<Profile>
     private lateinit var preferences: SharedPreferences
+    private lateinit var gson: Gson
 
     companion object {
         const val ANY_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
+        const val ANY_USERNAME = "john.doe@company.com"
+        val anyProfile = Profile(Email(ANY_USERNAME), Token(ANY_TOKEN))
     }
 
     @Before
@@ -36,7 +39,8 @@ class SharedPreferencesTokenDataSourceTest {
         val app = InstrumentationRegistry.getInstrumentation().targetContext.asApp()
 
         preferences = app.getKoin().get()
-        dataSource = app.getKoin().get(named("Token"))
+        dataSource = app.getKoin().get(named("Profile"))
+        gson = app.getKoin().get()
     }
 
     @After
@@ -46,59 +50,56 @@ class SharedPreferencesTokenDataSourceTest {
 
     @Test
     fun itemShouldBeOnSharedpreferencesWhenIAddItOnDatasource() {
-        val token = Token(ANY_TOKEN)
+        val profile = anyProfile
 
-        val result = dataSource + token
+        val result = dataSource + profile
 
         Assert.assertTrue(result is Either.Right<Unit>)
-        Assert.assertTrue(preferences.contains(ActualDS.ID))
-        val actual = preferences.getString(ActualDS.ID, "")!!
-        Assert.assertEquals(ANY_TOKEN, actual)
+        Assert.assertTrue(preferences.contains(DS.ID))
+        val actual = gson.fromJson(preferences.getString(DS.ID, "")!!, Profile::class.java)
+        Assert.assertEquals(anyProfile, actual)
     }
 
     @Test
     fun itemShouldBeOnSharedpreferencesWhenIAddItOnDatasourceEvenIfDatasourceWasNotEmpty() {
-        dataSource + Token("")
-        val token = Token(ANY_TOKEN)
+        dataSource + Profile(Email(""), Token(""))
 
-        val result = dataSource + token
+        val result = dataSource + anyProfile
 
         Assert.assertTrue(result is Either.Right<Unit>)
-        Assert.assertTrue(preferences.contains(ActualDS.ID))
-        val actual = preferences.getString(ActualDS.ID, "")!!
-        Assert.assertEquals(ANY_TOKEN, actual)
+        Assert.assertTrue(preferences.contains(DS.ID))
+        val actual = gson.fromJson(preferences.getString(DS.ID, "")!!, Profile::class.java)
+        Assert.assertEquals(anyProfile, actual)
     }
 
     @Test
     fun itemIsReturnedByGetWhenIAddItOnDatasource() {
-        val token = Token(ANY_TOKEN)
-        dataSource + token
+        dataSource + anyProfile
 
         val actual = dataSource.get()
 
-        Assert.assertTrue(preferences.contains(ActualDS.ID))
-        Assert.assertTrue(actual is Either.Right<Token>)
-        actual.map { Assert.assertEquals(token, it) }
+        Assert.assertTrue(preferences.contains(DS.ID))
+        Assert.assertTrue(actual is Either.Right<Profile>)
+        actual.map { Assert.assertEquals(anyProfile, it) }
     }
 
     @Test
     fun theTokenNotFoundErrorIsReturnedByGetWhenDatasourceIsEmpty() {
         val actual = dataSource.get()
 
-        Assert.assertFalse(preferences.contains(ActualDS.ID))
+        Assert.assertFalse(preferences.contains(DS.ID))
         Assert.assertTrue(actual is Either.Left<StorageError>)
         actual.mapLeft { Assert.assertEquals(DataNotFound, it) }
     }
 
     @Test
     fun sharedPreferencesShouldBeEmptyWhenItemIsRemovedFromDataSource() {
-        val token = Token(ANY_TOKEN)
-        dataSource + token
+        dataSource + anyProfile
 
-        val result = dataSource - token
+        val result = dataSource - anyProfile
 
         Assert.assertTrue(result is Either.Right<Unit>)
-        Assert.assertFalse(preferences.contains(ActualDS.ID))
+        Assert.assertFalse(preferences.contains(DS.ID))
         val actual = dataSource.get()
         Assert.assertTrue(actual is Either.Left<StorageError>)
         actual.mapLeft { Assert.assertEquals(DataNotFound, it) }
